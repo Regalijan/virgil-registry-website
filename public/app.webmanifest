@@ -1,0 +1,55 @@
+{
+  "name": "Virgil Verification Registry",
+  "short_name": "Virgil Registry",
+  "start_url": ".",
+  "lang": "en-US",
+  "background_color": "#ff0000",
+  "description": "Verify your Roblox account with the Virgil Verification Registry",
+  "icons": [
+    {
+      "src": "/logo44.png",
+      "sizes": "44x44",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo320.png",
+      "sizes": "320x320",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
