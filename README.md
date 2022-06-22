@@ -9,4 +9,5 @@ There are two ways to deploy this site.
 You can either:
 
 1: Clone/Download a zip file of the repository and directly upload it with wrangler.
+
 2: Fork this repository and connect your fork to your Cloudflare account.
