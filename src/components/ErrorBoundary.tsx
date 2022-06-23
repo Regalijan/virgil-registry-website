@@ -23,11 +23,10 @@ export default class Fallback extends Component<Props, ErrorState> {
   }
 
   render() {
-    if (!this.state.errored)
-      return this.props.children;
+    if (!this.state.errored) return this.props.children;
     return (
       <>
-      <Navigation />
+        <Navigation />
         <Container maxW="container.xl" pb="100px">
           <Heading>Oops! Something broke.</Heading>
           <Text fontSize="xl">See the details below</Text>
