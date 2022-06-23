@@ -7,6 +7,7 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 const AUP = lazy(() => import("./components/AUP"));
 const Home = lazy(() => import("./components/Home"));
+const NotFound = lazy(() => import("./components/NotFound"));
 
 export default function () {
   return (
@@ -17,6 +18,7 @@ export default function () {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="*" element={<NotFound />} />
               <Route path="/aup" element={<AUP />} />
             </Routes>
           </BrowserRouter>
