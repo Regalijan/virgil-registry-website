@@ -18,7 +18,7 @@ export default function () {
     window.addEventListener("resize", function () {
       const isDesktop = screen.availWidth > 900;
       setpb(isDesktop ? "0" : "40px");
-      setDesktop(isDesktop)
+      setDesktop(isDesktop);
     });
   });
 
