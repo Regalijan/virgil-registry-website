@@ -12,5 +12,8 @@ type EventContext<Env, P extends string, Data> = {
   data: Data;
 };
 
-export type Context = EventContext<{[k: string]: string}, string, { [k: string]: any }>
-  
+export type Context = EventContext<
+  { [k: string]: string },
+  string,
+  { [k: string]: any }
+>;

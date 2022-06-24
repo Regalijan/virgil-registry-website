@@ -1,4 +1,11 @@
-import { Button, Container, Heading, Input, Text, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Container,
+  Heading,
+  Input,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { useState } from "react";
 
 function validUsername(username: string): boolean {
@@ -8,8 +15,8 @@ function validUsername(username: string): boolean {
     username.match(/\W/) ||
     username.startsWith("_") ||
     username.endsWith("_") ||
-    username.match(/_/g)?.length as number > 1
-  )
+    (username.match(/_/g)?.length as number) > 1
+  );
 }
 
 export default function () {
@@ -34,11 +41,24 @@ export default function () {
       <br />
       <Text fontSize="xl">This will be quick, we promise.</Text>
       <br />
-      <Text pb="10px" align="left" pl="15%">What is your Roblox username?</Text>
-      <Input placeholder="builderman" w="70%" onChange={(e) => {
-        setUsername(e.target.value);
-      }} />
-      <Button alignSelf="center" mt="15px" w="70%" onClick={() => handleSubmit(username) }>Next</Button>
+      <Text pb="10px" align="left" pl="15%">
+        What is your Roblox username?
+      </Text>
+      <Input
+        placeholder="builderman"
+        w="70%"
+        onChange={(e) => {
+          setUsername(e.target.value);
+        }}
+      />
+      <Button
+        alignSelf="center"
+        mt="15px"
+        w="70%"
+        onClick={() => handleSubmit(username)}
+      >
+        Next
+      </Button>
     </Container>
-  )
+  );
 }

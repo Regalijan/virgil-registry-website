@@ -8,7 +8,9 @@ import Footer from "./components/Footer";
 const AUP = lazy(() => import("./components/AUP"));
 const Home = lazy(() => import("./components/Home"));
 const NotFound = lazy(() => import("./components/NotFound"));
-const VerificationLanding = lazy(() => import("./components/VerificationLanding"));
+const VerificationLanding = lazy(
+  () => import("./components/VerificationLanding")
+);
 
 export default function () {
   return (
