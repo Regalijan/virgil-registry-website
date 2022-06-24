@@ -7,6 +7,7 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 const AUP = lazy(() => import("./components/AUP"));
 const Home = lazy(() => import("./components/Home"));
+const Login = lazy(() => import("./components/Login"));
 const NotFound = lazy(() => import("./components/NotFound"));
 const VerificationLanding = lazy(
   () => import("./components/VerificationLanding")
@@ -23,6 +24,7 @@ export default function () {
               <Route path="/" element={<Home />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/aup" element={<AUP />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/verify" element={<VerificationLanding />} />
             </Routes>
           </BrowserRouter>
