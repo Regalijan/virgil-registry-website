@@ -69,7 +69,7 @@ export default function () {
       <Divider />
       <Stack
         pt="8"
-        pb="12"
+        pb="4"
         justify="space-between"
         direction={{ base: "column-reverse", md: "row" }}
         align="center"
@@ -95,6 +95,11 @@ export default function () {
             }
           />
         </ButtonGroup>
+      </Stack>
+      <Stack pt="4" direction={{ base: "column-reverse", md: "row" }} align="center">
+        <Link fontSize="sm" href="/attributions">
+          Attributions
+        </Link>
       </Stack>
     </Container>
   );
