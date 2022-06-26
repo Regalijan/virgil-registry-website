@@ -1,5 +1,24 @@
 import { Context, KVNamespace } from "../../..";
 
+export async function onRequestDelete(context: Context) {
+  const { env, request } = context;
+  const SESSIONS = env.SESSIONS as unknown as KVNamespace;
+  const token = await request.headers.get("authorization");
+
+  if (!token)
+    return new Response('{"error":"Missing token"}', {
+      headers: {
+        "content-type": "application/json",
+      },
+      status: 401,
+    });
+
+  await SESSIONS.delete(token);
+  return new Response(null, {
+    status: 204,
+  });
+}
+
 export async function onRequestPost(context: Context) {
   const { env, request } = context;
   const SESSIONS = env.SESSIONS as unknown as KVNamespace;
