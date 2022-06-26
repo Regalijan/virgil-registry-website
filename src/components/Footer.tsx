@@ -96,7 +96,11 @@ export default function () {
           />
         </ButtonGroup>
       </Stack>
-      <Stack pt="4" direction={{ base: "column-reverse", md: "row" }} align="center">
+      <Stack
+        pt="4"
+        direction={{ base: "column-reverse", md: "row" }}
+        align="center"
+      >
         <Link fontSize="sm" href="/attributions">
           Attributions
         </Link>

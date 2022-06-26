@@ -25,20 +25,23 @@ export default function () {
       if (!exchangeResponse.ok) {
         let error: string = "Unknown error";
         try {
-          error = (await exchangeResponse.json()).error
+          error = (await exchangeResponse.json()).error;
         } catch {}
         setError(error);
         return hasFailed(true);
       }
 
-      window.localStorage.setItem("registry-session", (await exchangeResponse.json()).session);
+      window.localStorage.setItem(
+        "registry-session",
+        (await exchangeResponse.json()).session
+      );
       window.location.assign(redirect_to);
     })();
-  })
+  });
 
   switch (failed) {
     case false:
-      return <Loading />
+      return <Loading />;
     case true:
       return (
         <Container maxW="container.xl" textAlign="center">
@@ -47,6 +50,6 @@ export default function () {
           <br />
           <Text>{error}</Text>
         </Container>
-      )
+      );
   }
 }
