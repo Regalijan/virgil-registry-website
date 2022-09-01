@@ -1,4 +1,4 @@
-export async function onRequestGet(context: EventContext<{[k: string]: any}, any, any>): Promise<Response> {
+export async function onRequestGet(context: EventContext<{[k: string]: string}, any, any>): Promise<Response> {
   const { env, request } = context;
   const { hostname, protocol } = new URL(request.url);
   return Response.redirect(
