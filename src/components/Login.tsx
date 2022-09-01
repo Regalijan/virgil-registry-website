@@ -10,35 +10,80 @@ export default function () {
   const redirect_to = searchParams.get("state") ?? "/";
 
   useEffect(() => {
-    if (!code) return window.location.assign("/client-api/auth/login");
-
     (async function () {
-      const exchangeResponse = await fetch("/client-api/auth/session", {
-        body: JSON.stringify({ code }),
-        cache: "no-cache",
+      if (searchParams.get("code")) {
+        if (!sessionStorage.getItem("code-verifier")) {
+          setError("Code verifier missing");
+          return hasFailed(true);
+        }
+
+        const exchangeResponse = await fetch("/client-api/auth/session", {
+          body: JSON.stringify({
+            code,
+            verifier: sessionStorage.getItem("code-verifier"),
+          }),
+          cache: "no-cache",
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "POST",
+        });
+
+        if (!exchangeResponse.ok) {
+          let error: string = "Unknown error";
+          try {
+            const errorData: { error: string } = await exchangeResponse.json();
+            error = errorData.error;
+          } catch {}
+          setError(error);
+          return hasFailed(true);
+        }
+
+        const sessionData: { session: string } = await exchangeResponse.json();
+
+        localStorage.setItem("registry-session", sessionData.session);
+        sessionStorage.removeItem("code-verifier")
+        return window.location.assign(redirect_to);
+      }
+
+      let verifier = "";
+
+      while (verifier.length < 128) {
+        verifier += crypto.randomUUID().replace(/-/g, "");
+      }
+
+      sessionStorage.setItem("code-verifier", verifier);
+
+      const challenge = btoa(
+        String.fromCharCode(
+          ...new Uint8Array(
+            await crypto.subtle.digest(
+              "SHA-256",
+              new TextEncoder().encode(verifier)
+            )
+          )
+        )
+      )
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=/g, "");
+
+      const urlRequest = await fetch("/client-api/auth/login", {
+        body: JSON.stringify({ challenge }),
         headers: {
           "content-type": "application/json",
         },
         method: "POST",
       });
 
-      if (!exchangeResponse.ok) {
-        let error: string = "Unknown error";
-        try {
-          const errorData: { error: string } = await exchangeResponse.json();
-          error =  errorData.error;
-        } catch {}
-        setError(error);
+      const { url }: { url?: string } = await urlRequest.json();
+
+      if (!url) {
+        setError("Failed to retrieve sign-in URL");
         return hasFailed(true);
       }
 
-      const sessionData: { session: string } = await exchangeResponse.json();
-
-      window.localStorage.setItem(
-        "registry-session",
-        sessionData.session
-      );
-      window.location.assign(redirect_to);
+      window.location.assign(url);
     })();
   });
 
