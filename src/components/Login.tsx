@@ -42,7 +42,7 @@ export default function () {
         const sessionData: { session: string } = await exchangeResponse.json();
 
         localStorage.setItem("registry-session", sessionData.session);
-        sessionStorage.removeItem("code-verifier")
+        sessionStorage.removeItem("code-verifier");
         return window.location.assign(redirect_to);
       }
 
