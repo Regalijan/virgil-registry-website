@@ -1,6 +1,4 @@
-import { Context, KVNamespace } from "../../..";
-
-export async function onRequestDelete(context: Context) {
+export async function onRequestDelete(context: EventContext<{[k: string]: any}, string, string>) {
   const { env, request } = context;
   const SESSIONS = env.SESSIONS as unknown as KVNamespace;
   const token = await request.headers.get("authorization");
@@ -19,7 +17,7 @@ export async function onRequestDelete(context: Context) {
   });
 }
 
-export async function onRequestPost(context: Context) {
+export async function onRequestPost(context: EventContext<{[k: string]: string}, string, {[k: number | string]: any}>) {
   const { env, request } = context;
   const SESSIONS = env.SESSIONS as unknown as KVNamespace;
 
@@ -60,7 +58,13 @@ export async function onRequestPost(context: Context) {
       status: 500,
     });
 
-  const { access_token, token_type } = await tokenRequest.json();
+  const { access_token, token_type }: {
+    access_token: string,
+    expires_in: number,
+    refresh_token: string,
+    scope: string,
+    token_type: string
+  } = await tokenRequest.json();
 
   const currentUserRequest = await fetch("https://discord.com/api/users/@me", {
     headers: {

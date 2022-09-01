@@ -25,15 +25,18 @@ export default function () {
       if (!exchangeResponse.ok) {
         let error: string = "Unknown error";
         try {
-          error = (await exchangeResponse.json()).error;
+          const errorData: { error: string } = await exchangeResponse.json();
+          error =  errorData.error;
         } catch {}
         setError(error);
         return hasFailed(true);
       }
 
+      const sessionData: { session: string } = await exchangeResponse.json();
+
       window.localStorage.setItem(
         "registry-session",
-        (await exchangeResponse.json()).session
+        sessionData.session
       );
       window.location.assign(redirect_to);
     })();
