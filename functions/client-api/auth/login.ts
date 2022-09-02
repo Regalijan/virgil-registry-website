@@ -16,6 +16,14 @@ export async function onRequestPost(
     });
   }
 
+  if (!body.challenge)
+    return new Response(JSON.stringify({ error: "Missing challenge" }), {
+      headers: {
+        "content-type": "application/json",
+      },
+      status: 400,
+    });
+
   const kvstore = env.SESSIONS as unknown as KVNamespace;
 
   await kvstore.put(
