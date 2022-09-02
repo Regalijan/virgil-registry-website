@@ -29,7 +29,9 @@ export default function () {
                 <Button>Docs</Button>
               </ButtonGroup>
               <HStack spacing="3">
-                <Button>Sign In</Button>
+                <Button onClick={() => window.location.assign("/login")}>
+                  Sign In
+                </Button>
               </HStack>
             </Flex>
           </HStack>
