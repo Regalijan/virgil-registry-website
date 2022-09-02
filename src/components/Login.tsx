@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Heading, Text } from "@chakra-ui/react";
 import Loading from "./Loading";
+import createChallenge from "../challenge";
 
 export default function () {
   const [failed, hasFailed] = useState(false);
@@ -54,19 +55,7 @@ export default function () {
 
       sessionStorage.setItem("code-verifier", verifier);
 
-      const challenge = btoa(
-        String.fromCharCode(
-          ...new Uint8Array(
-            await crypto.subtle.digest(
-              "SHA-256",
-              new TextEncoder().encode(verifier)
-            )
-          )
-        )
-      )
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=/g, "");
+      const challenge = await createChallenge(verifier);
 
       const urlRequest = await fetch("/client-api/auth/login", {
         body: JSON.stringify({ challenge }),
