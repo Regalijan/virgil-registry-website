@@ -29,7 +29,10 @@ export async function onRequestPost(
       status: 500,
     });
 
-  const { id_token }: { id_token?: string } = await jwtFetch.json();
+  const {
+    access_token,
+    id_token,
+  }: { access_token: string; id_token?: string } = await jwtFetch.json();
 
   if (!id_token)
     return new Response(
@@ -54,6 +57,15 @@ export async function onRequestPost(
       username: decodedToken.name,
     })
   );
+
+  await fetch("https://apis.roblox.com/oauth/v1/token/revoke", {
+    body: `token=${access_token}`,
+    headers: {
+      authorization: `Basic ${btoa(env.RBX_ID + ":" + env.RBX_SECRET)}`,
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    method: "POST",
+  });
 
   return new Response(null, {
     status: 204,
