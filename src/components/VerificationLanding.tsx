@@ -1,63 +1,63 @@
-import {
-  Button,
-  Container,
-  Heading,
-  Input,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
-import { useState } from "react";
+import { Button, Container, Heading, Text, useToast } from "@chakra-ui/react";
+import createChallenge from "../challenge";
 
-function validUsername(username: string): boolean {
-  return !(
-    username.length < 3 ||
-    username.length > 20 ||
-    username.match(/\W/) ||
-    username.startsWith("_") ||
-    username.endsWith("_") ||
-    (username.match(/_/g)?.length as number) > 1
+async function initiateRBXSignIn() {
+  let verifier = "";
+
+  while (verifier.length < 128) {
+    verifier += crypto.randomUUID().replace(/-/g, "");
+  }
+
+  sessionStorage.setItem("rbx-code-verifier", verifier);
+
+  const challenge = await createChallenge(verifier);
+  const { hostname, protocol } = new URL(window.location.href);
+
+  const clientIdRequest = await fetch("/client-api/linking/initiate", {
+    headers: {
+      authorization: window.localStorage.getItem("registry-session") ?? "",
+    },
+  });
+
+  const { client_id }: { client_id: string } = await clientIdRequest.json();
+
+  if (!clientIdRequest.ok) {
+    useToast()({
+      title: "Uh oh!",
+      status: "error",
+      description:
+        "We were unable to fetch the client id needed to verify you.",
+      isClosable: true,
+      duration: 10000,
+    });
+    return;
+  }
+
+  window.location.assign(
+    `https://authorize.roblox.com/?client_id=${client_id}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
+      `${protocol}//${hostname}/link`
+    )}&response_type=code&scope=openid%20profile`
   );
 }
 
 export default function () {
-  const toast = useToast();
-  function handleSubmit(username: string): void {
-    if (!validUsername(username)) {
-      toast({
-        description: "Please check the username and try again",
-        isClosable: true,
-        status: "error",
-        title: "Invalid Username",
-      });
-      return;
-    }
-  }
-
-  const [username, setUsername] = useState("");
-
   return (
     <Container pt="40px" maxW="28em">
       <Heading>Hello</Heading>
       <br />
       <Text fontSize="xl">This will be quick, we promise.</Text>
       <br />
+      <br />
       <Text pb="10px" align="left" pl="15%">
-        What is your Roblox username?
+        Click the button to verify your account
       </Text>
-      <Input
-        placeholder="builderman"
-        w="70%"
-        onChange={(e) => {
-          setUsername(e.target.value);
-        }}
-      />
       <Button
         alignSelf="center"
         mt="15px"
         w="70%"
-        onClick={() => handleSubmit(username)}
+        onClick={async () => await initiateRBXSignIn()}
       >
-        Next
+        Verify with Roblox
       </Button>
     </Container>
   );
