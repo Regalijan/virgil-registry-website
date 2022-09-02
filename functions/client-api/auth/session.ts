@@ -149,7 +149,7 @@ export async function onRequestPost(
         .map((b) => b.toString(16).padStart(2, "0"))
         .join(""),
       await currentUserRequest.text()
-    );
+    , { expirationTtl: 3600 });
   } catch {
     return new Response('{"error":"Failed to create session"}', {
       headers: {
