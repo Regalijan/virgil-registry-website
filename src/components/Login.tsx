@@ -76,7 +76,11 @@ export default function () {
         method: "POST",
       });
 
-      const { url }: { url?: string } = await urlRequest.json();
+      let url: string | undefined;
+
+      try {
+        url = ((await urlRequest.json()) as { url?: string }).url;
+      } catch {}
 
       if (!url) {
         setError("Failed to retrieve sign-in URL");
