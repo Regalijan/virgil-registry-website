@@ -10,6 +10,8 @@ const AUP = lazy(() => import("./components/AUP"));
 const Home = lazy(() => import("./components/Home"));
 const Login = lazy(() => import("./components/Login"));
 const NotFound = lazy(() => import("./components/NotFound"));
+const Privacy = lazy(() => import("./components/Privacy"));
+const Terms = lazy(() => import("./components/Terms"));
 const VerificationLanding = lazy(
   () => import("./components/VerificationLanding")
 );
@@ -27,6 +29,8 @@ export default function () {
               <Route path="/attributions" element={<Attributions />} />
               <Route path="/aup" element={<AUP />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
               <Route path="/verify" element={<VerificationLanding />} />
             </Routes>
           </BrowserRouter>
