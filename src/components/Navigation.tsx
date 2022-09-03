@@ -139,7 +139,7 @@ export default function () {
       <Drawer isOpen={isOpen} onClose={onClose} placement="left">
         <DrawerOverlay />
         <DrawerContent p="2vh">
-          <CloseButton />
+          <CloseButton onClick={onClose} />
           <br />
           <Link href="/premium">Premium</Link>
           <br />
