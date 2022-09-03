@@ -19,6 +19,21 @@ export async function onRequestDelete(
   });
 }
 
+export async function onRequestGet(
+  context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>
+) {
+  const [body, status] = context.data.user
+    ? [context.data.user, 200]
+    : [{ error: "Unauthenticated" }, 401];
+
+  return new Response(JSON.stringify(body), {
+    headers: {
+      "content-type": "application/json",
+    },
+    status,
+  });
+}
+
 export async function onRequestPost(
   context: EventContext<
     { [k: string]: string },
