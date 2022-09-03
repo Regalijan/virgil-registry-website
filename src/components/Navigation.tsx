@@ -16,13 +16,13 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-function getAvatarUrl(userData: {[k: string]: any}): string {
+function getAvatarUrl(userData: { [k: string]: any }): string {
   const BASE = "https://cdn.discordapp.com/";
 
   if (!userData.id) return "";
 
   if (!userData.avatar)
-    return BASE + `embed/avatars/${parseInt(userData.discriminator) % 5}.png`
+    return BASE + `embed/avatars/${parseInt(userData.discriminator) % 5}.png`;
 
   return BASE + `avatars/${userData.id}/${userData.avatar}`;
 }
@@ -116,7 +116,7 @@ export default function () {
                   </Button>
                 </ButtonGroup>
                 <HStack spacing="3">
-                <Avatar
+                  <Avatar
                     display={authed ? "flex" : "none"}
                     name={userData.username}
                     src={getAvatarUrl(userData)}
@@ -137,7 +137,35 @@ export default function () {
       </Box>
       <Drawer isOpen={isOpen} onClose={onClose} placement="left">
         <DrawerOverlay />
-        <DrawerContent></DrawerContent>
+        <DrawerContent p="2vh">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+            onClick={onClose}
+          >
+            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+          </svg>
+          <br />
+          <Link href="/premium">Premium</Link>
+          <br />
+          <Link href="https://discord.com/invite/carcrushers">Support</Link>
+          <br />
+          <Link href="/docs">Docs</Link>
+          <br />
+          <Link href={authed ? "/me" : "/login"}>
+            {authed ? "Manage" : "Sign In"}
+          </Link>
+          <br />
+          <Avatar
+            display={authed ? "" : "none"}
+            name={userData.username}
+            src={getAvatarUrl(userData)}
+          />
+          {userData.username}#{userData.discriminator}
+        </DrawerContent>
       </Drawer>
     </>
   );
