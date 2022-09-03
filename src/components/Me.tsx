@@ -20,6 +20,11 @@ export default function () {
 
       if (registryDataReq.status.toString().startsWith("4"))
         return window.location.assign("/login");
+
+      if (!registryDataReq.ok) {
+        hasErrored(true);
+        return isLoading(false);
+      }
     })();
   });
 
