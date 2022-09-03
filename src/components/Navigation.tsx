@@ -12,6 +12,7 @@ import {
   Flex,
   HStack,
   Link,
+  Text,
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -120,9 +121,11 @@ export default function () {
                     name={userData.username}
                     src={getAvatarUrl(userData)}
                   />
-                  {userData.id
-                    ? `${userData.username}#${userData.discriminator}`
-                    : ""}
+                  <Text>
+                    {userData.id
+                      ? `${userData.username}#${userData.discriminator}`
+                      : ""}
+                  </Text>
                   <Button
                     onClick={() =>
                       window.location.assign(userData.id ? "/me" : "/login")
@@ -156,7 +159,11 @@ export default function () {
             name={userData.username}
             src={getAvatarUrl(userData)}
           />
-          {userData.id ? `${userData.username}#${userData.discriminator}` : ""}
+          <Text>
+            {userData.id
+              ? `${userData.username}#${userData.discriminator}`
+              : ""}
+          </Text>
         </DrawerContent>
       </Drawer>
     </>
