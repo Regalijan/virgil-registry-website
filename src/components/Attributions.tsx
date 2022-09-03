@@ -86,6 +86,14 @@ export default function () {
             Check circle fill by Bootstrap Icons
           </Link>
         </ListItem>
+        <ListItem>
+          <Link
+            href="https://icons.getbootstrap.com/icons/list/"
+            target="_blank"
+          >
+            List by Bootstrap Icons
+          </Link>
+        </ListItem>
       </UnorderedList>
       <br />
       <Heading>Original Logo</Heading>
