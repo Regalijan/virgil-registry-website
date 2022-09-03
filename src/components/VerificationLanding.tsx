@@ -21,6 +21,9 @@ async function initiateRBXSignIn() {
 
   const { client_id }: { client_id: string } = await clientIdRequest.json();
 
+  if (clientIdRequest.status === 401)
+    return window.location.assign("/login");
+
   if (!clientIdRequest.ok) {
     useToast()({
       title: "Uh oh!",
@@ -41,6 +44,9 @@ async function initiateRBXSignIn() {
 }
 
 export default function () {
+  if (!localStorage.getItem("registry-session"))
+    return window.location.assign("/");
+
   return (
     <Container pt="40px" maxW="28em">
       <Heading>Hello</Heading>
