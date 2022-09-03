@@ -11,6 +11,8 @@ export default function () {
   const redirect_to = searchParams.get("state") ?? "/";
 
   useEffect(() => {
+    if (localStorage.getItem("registry-session"))
+      return window.location.assign("/me");
     (async function () {
       if (searchParams.get("code")) {
         if (!sessionStorage.getItem("code-verifier")) {
