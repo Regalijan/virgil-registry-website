@@ -1,42 +1,138 @@
 import {
+  Avatar,
   Box,
   Button,
   ButtonGroup,
+  Center,
   Container,
+  Drawer,
+  DrawerContent,
+  DrawerOverlay,
   Flex,
   HStack,
+  Link,
   useBreakpointValue,
+  useDisclosure,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 export default function () {
   const isDesktop = useBreakpointValue({ base: false, lg: true });
+  const [authed, setAuthed] = useState(false);
+  const [userData, setUserData]: [
+    { [k: string]: any },
+    React.Dispatch<React.SetStateAction<{ [k: string]: any }>>
+  ] = useState({});
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  useEffect(() => {
+    (async function () {
+      const session = localStorage.getItem("registry-session");
+
+      if (!session) return;
+
+      const authCheckReq = await fetch("/client-api/auth/session", {
+        headers: {
+          authorization: session,
+        },
+      });
+
+      setAuthed(authCheckReq.ok);
+      if (authCheckReq.ok) setUserData(await authCheckReq.json());
+    })();
+  });
+
   return (
-    <Box as="section" pb={{ base: "12" }}>
-      <Box as="nav" justifyContent="center">
-        <Container py={{ base: "6" }}>
-          <HStack spacing={isDesktop ? "6" : "4"} justifyContent="left">
-            <a href="/">
-              <img
-                src="/logo.png"
-                alt="Virgil Registry Logo"
-                style={{ width: "36px", borderRadius: "50%" }}
-              />
-            </a>
-            <Flex justify="space-between" flex="1">
-              <ButtonGroup variant="link" spacing="6">
-                <Button>Premium</Button>
-                <Button>Support</Button>
-                <Button>Docs</Button>
-              </ButtonGroup>
-              <HStack spacing="3">
-                <Button onClick={() => window.location.assign("/login")}>
-                  Sign In
-                </Button>
-              </HStack>
-            </Flex>
-          </HStack>
-        </Container>
+    <>
+      <Box as="section" pb={{ base: "12" }}>
+        <Box as="nav" justifyContent="center">
+          <Container maxW="container.lg" py={{ base: "6" }}>
+            <Container
+              alignItems="center"
+              display={isDesktop ? "none" : "flex"}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+                onClick={onOpen}
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+                />
+              </svg>
+              <Center w="100%">
+                <a href="/">
+                  <img
+                    src="/logo44.png"
+                    alt="Virgil Registry Logo"
+                    style={{ width: "36px", borderRadius: "50%" }}
+                  />
+                </a>
+              </Center>
+            </Container>
+            <HStack
+              display={isDesktop ? "flex" : "none"}
+              justifyContent="left"
+              spacing="6"
+            >
+              <a href="/">
+                <img
+                  src="/logo.png"
+                  alt="Virgil Registry Logo"
+                  style={{ width: "36px", borderRadius: "50%" }}
+                />
+              </a>
+              <Flex justify="space-between" flex="1">
+                <ButtonGroup variant="link" spacing="6">
+                  <Button onClick={() => window.location.assign("/premium")}>
+                    Premium
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      window.location.assign(
+                        "https://discord.com/invite/carcrushers"
+                      )
+                    }
+                  >
+                    Support
+                  </Button>
+                  <Button onClick={() => window.location.assign("/docs")}>
+                    Docs
+                  </Button>
+                </ButtonGroup>
+                <HStack spacing="3">
+                  <Avatar
+                    display={authed ? "flex" : "none"}
+                    name="?"
+                    src={`https://cdn.discordapp.com/${
+                      userData.avatar
+                        ? `avatars/${userData.id}/${userData.avatar}`
+                        : `embed/avatars/${
+                            parseInt(userData.discriminator) % 5
+                          }.png`
+                    }`}
+                  />
+                  <Button
+                    onClick={() =>
+                      window.location.assign(authed ? "/me" : "/login")
+                    }
+                  >
+                    {authed ? "Manage" : "Sign In"}
+                  </Button>
+                </HStack>
+              </Flex>
+            </HStack>
+          </Container>
+        </Box>
       </Box>
-    </Box>
+      <Drawer isOpen={isOpen} onClose={onClose} placement="left">
+        <DrawerOverlay />
+        <DrawerContent></DrawerContent>
+      </Drawer>
+    </>
   );
 }

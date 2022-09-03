@@ -29,8 +29,7 @@ export default function () {
           <Heading>Roblox and Discord are better together</Heading>
           <br />
           <Text fontSize="xl">
-            Connect your Roblox account with Discord - Integrated with
-            Virgil
+            Connect your Roblox account with Discord - Integrated with Virgil
           </Text>
           <br />
           <br />
