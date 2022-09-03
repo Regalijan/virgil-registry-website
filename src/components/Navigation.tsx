@@ -16,6 +16,17 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
+function getAvatarUrl(userData: {[k: string]: any}): string {
+  const BASE = "https://cdn.discordapp.com/";
+
+  if (!userData.id) return "";
+
+  if (!userData.avatar)
+    return BASE + `embed/avatars/${parseInt(userData.discriminator) % 5}.png`
+
+  return BASE + `avatars/${userData.id}/${userData.avatar}`;
+}
+
 export default function () {
   const isDesktop = useBreakpointValue({ base: false, lg: true });
   const [authed, setAuthed] = useState(false);
@@ -105,17 +116,12 @@ export default function () {
                   </Button>
                 </ButtonGroup>
                 <HStack spacing="3">
-                  <Avatar
+                <Avatar
                     display={authed ? "flex" : "none"}
-                    name="?"
-                    src={`https://cdn.discordapp.com/${
-                      userData.avatar
-                        ? `avatars/${userData.id}/${userData.avatar}`
-                        : `embed/avatars/${
-                            parseInt(userData.discriminator) % 5
-                          }.png`
-                    }`}
+                    name={userData.username}
+                    src={getAvatarUrl(userData)}
                   />
+                  {userData.username}#{userData.discriminator}
                   <Button
                     onClick={() =>
                       window.location.assign(authed ? "/me" : "/login")
