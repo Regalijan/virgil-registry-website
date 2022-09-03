@@ -29,7 +29,6 @@ function getAvatarUrl(userData: { [k: string]: any }): string {
 
 export default function () {
   const isDesktop = useBreakpointValue({ base: false, lg: true });
-  const [authed, setAuthed] = useState(false);
   const [userData, setUserData]: [
     { [k: string]: any },
     React.Dispatch<React.SetStateAction<{ [k: string]: any }>>
@@ -48,7 +47,6 @@ export default function () {
         },
       });
 
-      setAuthed(authCheckReq.ok);
       if (authCheckReq.ok) setUserData(await authCheckReq.json());
     })();
   });
@@ -117,17 +115,19 @@ export default function () {
                 </ButtonGroup>
                 <HStack spacing="3">
                   <Avatar
-                    display={authed ? "flex" : "none"}
+                    display={userData.id ? "flex" : "none"}
                     name={userData.username}
                     src={getAvatarUrl(userData)}
                   />
-                  {userData.username}#{userData.discriminator}
+                  {userData.id
+                    ? `${userData.username}#${userData.discriminator}`
+                    : ""}
                   <Button
                     onClick={() =>
-                      window.location.assign(authed ? "/me" : "/login")
+                      window.location.assign(userData.id ? "/me" : "/login")
                     }
                   >
-                    {authed ? "Manage" : "Sign In"}
+                    {userData.id ? "Manage" : "Sign In"}
                   </Button>
                 </HStack>
               </Flex>
@@ -155,16 +155,16 @@ export default function () {
           <br />
           <Link href="/docs">Docs</Link>
           <br />
-          <Link href={authed ? "/me" : "/login"}>
-            {authed ? "Manage" : "Sign In"}
+          <Link href={userData.id ? "/me" : "/login"}>
+            {userData.id ? "Manage" : "Sign In"}
           </Link>
           <br />
           <Avatar
-            display={authed ? "" : "none"}
+            display={userData.id ? "" : "none"}
             name={userData.username}
             src={getAvatarUrl(userData)}
           />
-          {userData.username}#{userData.discriminator}
+          {userData.id ? `${userData.username}#${userData.discriminator}` : ""}
         </DrawerContent>
       </Drawer>
     </>
