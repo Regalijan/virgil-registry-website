@@ -85,7 +85,7 @@ export default function () {
       return <Loading />;
     case true:
       return (
-        <Container maxW="container.xl" textAlign="center">
+        <Container maxW="container.xl" pt="10vh" textAlign="center">
           <Heading pb="10px">We could not sign you in</Heading>
           <Text fontSize="xl">See the details below:</Text>
           <br />
