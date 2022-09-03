@@ -16,6 +16,7 @@ const Terms = lazy(() => import("./components/Terms"));
 const VerificationLanding = lazy(
   () => import("./components/VerificationLanding")
 );
+const VerifyError = lazy(() => import("./components/VerifyError"));
 
 export default function () {
   return (
@@ -34,6 +35,7 @@ export default function () {
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/verify" element={<VerificationLanding />} />
+              <Route path="/verify-error" element={<VerifyError />} />
             </Routes>
           </BrowserRouter>
           <Footer />
