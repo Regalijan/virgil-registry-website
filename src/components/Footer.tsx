@@ -36,7 +36,7 @@ export default function () {
                 Product
               </Text>
               <Stack spacing="3" shouldWrapChildren>
-                <Link>
+                <Link href="https://discord.com/invite/carcrushers">
                   <b>Support</b>
                 </Link>
                 <Link href="https://virgil.gg">
