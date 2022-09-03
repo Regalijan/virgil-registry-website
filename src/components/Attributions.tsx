@@ -94,14 +94,6 @@ export default function () {
             List by Bootstrap Icons
           </Link>
         </ListItem>
-        <ListItem>
-          <Link
-            href="https://icons.getbootstrap.com/icons/x-lg/"
-            target="_blank"
-          >
-            X lg by Bootstrap Icons
-          </Link>
-        </ListItem>
       </UnorderedList>
       <br />
       <Heading>Original Logo</Heading>
