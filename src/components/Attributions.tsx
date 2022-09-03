@@ -78,6 +78,14 @@ export default function () {
             Github by Bootstrap Icons
           </Link>
         </ListItem>
+        <ListItem>
+          <Link
+            href="https://icons.getbootstrap.com/icons/check-circle-fill/"
+            target="_blank"
+          >
+            Check circle fill by Bootstrap Icons
+          </Link>
+        </ListItem>
       </UnorderedList>
       <br />
       <Heading>Original Logo</Heading>
