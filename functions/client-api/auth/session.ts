@@ -1,5 +1,5 @@
 export async function onRequestDelete(
-  context: EventContext<{ [k: string]: any }, string, string>
+  context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>
 ) {
   const { env, request } = context;
   const SESSIONS = env.SESSIONS as unknown as KVNamespace;
