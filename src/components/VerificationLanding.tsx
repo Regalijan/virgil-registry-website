@@ -45,7 +45,7 @@ async function initiateRBXSignIn() {
 
 export default function () {
   if (!localStorage.getItem("registry-session"))
-    return window.location.assign("/");
+    window.location.assign("/");
 
   return (
     <Container pt="40px" maxW="28em">
