@@ -1,7 +1,6 @@
 export async function onRequestPost(
   context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>
 ) {
-
   const { data, env } = context;
 
   if (!data.body?.code || !data.body.verifier)
@@ -59,8 +58,10 @@ export async function onRequestPost(
     })
   );
 
-  const reverseData: string[] = JSON.parse(await verifyKV.get(decodedToken.sub) ?? "[]");
-  
+  const reverseData: string[] = JSON.parse(
+    (await verifyKV.get(decodedToken.sub)) ?? "[]"
+  );
+
   reverseData.push(data.user.id);
   await verifyKV.put(decodedToken.sub, JSON.stringify(reverseData));
 
