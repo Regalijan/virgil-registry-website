@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 const Attributions = lazy(() => import("./components/Attributions"));
 const AUP = lazy(() => import("./components/AUP"));
 const Home = lazy(() => import("./components/Home"));
+const Link = lazy(() => import("./components/Link"));
 const Login = lazy(() => import("./components/Login"));
 const NotFound = lazy(() => import("./components/NotFound"));
 const Privacy = lazy(() => import("./components/Privacy"));
@@ -28,6 +29,7 @@ export default function () {
               <Route path="*" element={<NotFound />} />
               <Route path="/attributions" element={<Attributions />} />
               <Route path="/aup" element={<AUP />} />
+              <Route path="/link" element={<Link />} />
               <Route path="/login" element={<Login />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
