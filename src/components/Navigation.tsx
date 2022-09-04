@@ -167,6 +167,7 @@ export default function () {
                     fill="currentColor"
                     viewBox="0 0 16 16"
                     style={{ display: userData.id ? "block" : "none" }}
+                    onClick={async () => await revokeSession()}
                   >
                     <path
                       fillRule="evenodd"
@@ -215,6 +216,7 @@ export default function () {
             fill="currentColor"
             viewBox="0 0 16 16"
             style={{ display: userData.id ? "block" : "none" }}
+            onClick={async () => await revokeSession()}
           >
             <path
               fillRule="evenodd"
