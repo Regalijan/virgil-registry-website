@@ -54,9 +54,24 @@ export async function onRequestPost(
       }
     );
 
-  const decodedToken: { [k: string]: string } = JSON.parse(
-    atob(id_token.replaceAll("-", "+").replaceAll("_", "/"))
-  );
+  let decodedToken: { [k: string]: string };
+
+  try {
+    decodedToken = JSON.parse(
+      atob(id_token.replaceAll("-", "+").replaceAll("_", "/"))
+    );
+  } catch {
+    return new Response(
+      JSON.stringify({ error: "Failed to decode ID token" }),
+      {
+        headers: {
+          "content-type": "application/json",
+        },
+        status: 500,
+      }
+    );
+  }
+
   const verifyKV = env.VERIFICATIONS as unknown as KVNamespace;
 
   await verifyKV.put(
