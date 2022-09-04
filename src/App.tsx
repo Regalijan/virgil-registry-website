@@ -5,6 +5,9 @@ import Loading from "./components/Loading";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+const AboutPrivacySettings = lazy(
+  () => import("./components/AboutPrivacySettings")
+);
 const Attributions = lazy(() => import("./components/Attributions"));
 const AUP = lazy(() => import("./components/AUP"));
 const Home = lazy(() => import("./components/Home"));
@@ -29,6 +32,10 @@ export default function () {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="*" element={<NotFound />} />
+              <Route
+                path="/about-privacy-settings"
+                element={<AboutPrivacySettings />}
+              />
               <Route path="/attributions" element={<Attributions />} />
               <Route path="/aup" element={<AUP />} />
               <Route path="/link" element={<Link />} />
