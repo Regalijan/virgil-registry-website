@@ -14,11 +14,20 @@ export async function onRequestPost(
       }
     );
 
+  const { hostname, protocol } = new URL(context.request.url);
+
   const jwtFetch = await fetch("https://apis.roblox.com/oauth/v1/token", {
+    body: new URLSearchParams({
+      code: data.body.code,
+      code_verifier: data.body.verifier,
+      grant_type: "authorization_code",
+      redirect_uri: `${protocol}//${hostname}/link`,
+    }).toString(),
     headers: {
       authorization: `Basic ${btoa(env.RBX_ID + ":" + env.RBX_SECRET)}`,
       "content-type": "application/x-www-form-urlencoded",
     },
+    method: "POST",
   });
 
   if (!jwtFetch.ok)
