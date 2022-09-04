@@ -39,7 +39,7 @@ export default function () {
               />
               <Route path="/attributions" element={<Attributions />} />
               <Route path="/aup" element={<AUP />} />
-              <Route path="/docs" element={<Link />} />
+              <Route path="/docs" element={<Docs />} />
               <Route path="/link" element={<Link />} />
               <Route path="/login" element={<Login />} />
               <Route path="/me" element={<Me />} />
