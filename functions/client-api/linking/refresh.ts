@@ -1,4 +1,4 @@
-export async function onRequestGet(
+export async function onRequestPost(
   context: EventContext<
     { [k: string]: string } & { VERIFICATIONS: KVNamespace },
     string,
