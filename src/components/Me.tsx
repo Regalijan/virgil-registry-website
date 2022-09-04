@@ -142,8 +142,7 @@ export default function () {
         duration: 5000,
         isClosable: true,
       });
-      await new Promise((p) => setTimeout(p, 5500));
-      window.location.reload();
+      setData({ ...data, privacy: { discord, roblox } });
     }
   }
 
@@ -171,6 +170,7 @@ export default function () {
       }
 
       setData(await registryDataReq.json());
+      onClose();
     })();
   }, []);
 
