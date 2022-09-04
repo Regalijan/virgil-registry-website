@@ -94,6 +94,14 @@ export default function () {
             List by Bootstrap Icons
           </Link>
         </ListItem>
+        <ListItem>
+          <Link
+            href="https://icons.getbootstrap.com/icons/box-arrow-right/"
+            target="_blank"
+          >
+            Box arrow right by Bootstrap Icons
+          </Link>
+        </ListItem>
       </UnorderedList>
       <br />
       <Heading>Original Logo</Heading>
