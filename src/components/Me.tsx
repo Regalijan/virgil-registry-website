@@ -162,8 +162,11 @@ export default function () {
         },
       });
 
-      if (registryDataReq.status.toString().startsWith("4"))
+      if (registryDataReq.status === 401)
         return window.location.assign("/login");
+
+      if (registryDataReq.status === 401)
+        return window.location.assign("/verify");
 
       if (!registryDataReq.ok) {
         hasErrored(true);
