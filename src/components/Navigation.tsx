@@ -15,6 +15,7 @@ import {
   Text,
   useBreakpointValue,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
@@ -36,6 +37,32 @@ export default function () {
     React.Dispatch<React.SetStateAction<{ [k: string]: any }>>
   ] = useState({});
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  async function revokeSession() {
+    const session = localStorage.getItem("registry-session");
+
+    if (!session) return setUserData({});
+
+    const revokeReq = await fetch("/client-api/auth/session", {
+      headers: {
+        authorization: session,
+      },
+      method: "DELETE",
+    });
+
+    if (revokeReq.status.toString().startsWith("5")) {
+      useToast()({
+        title: "Oops",
+        description: "We were unable to log you out",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+
+    localStorage.removeItem("registry-session");
+    setUserData({});
+  }
 
   useEffect(() => {
     (async function () {
@@ -116,6 +143,13 @@ export default function () {
                   </Button>
                 </ButtonGroup>
                 <HStack spacing="3">
+                  <Button
+                    onClick={() =>
+                      window.location.assign(userData.id ? "/me" : "/login")
+                    }
+                  >
+                    {userData.id ? "Manage" : "Sign In"}
+                  </Button>
                   <Avatar
                     display={userData.id ? "flex" : "none"}
                     name={userData.username}
@@ -126,13 +160,23 @@ export default function () {
                       ? `${userData.username}#${userData.discriminator}`
                       : ""}
                   </Text>
-                  <Button
-                    onClick={() =>
-                      window.location.assign(userData.id ? "/me" : "/login")
-                    }
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                    style={{ display: userData.id ? "block" : "none" }}
                   >
-                    {userData.id ? "Manage" : "Sign In"}
-                  </Button>
+                    <path
+                      fillRule="evenodd"
+                      d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"
+                    />
+                  </svg>
                 </HStack>
               </Flex>
             </HStack>
@@ -164,6 +208,23 @@ export default function () {
               ? `${userData.username}#${userData.discriminator}`
               : ""}
           </Text>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+            style={{ display: userData.id ? "block" : "none" }}
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"
+            />
+            <path
+              fillRule="evenodd"
+              d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"
+            />
+          </svg>
         </DrawerContent>
       </Drawer>
     </>
