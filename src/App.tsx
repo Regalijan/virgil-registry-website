@@ -16,6 +16,7 @@ const Link = lazy(() => import("./components/Link"));
 const Login = lazy(() => import("./components/Login"));
 const Me = lazy(() => import("./components/Me"));
 const NotFound = lazy(() => import("./components/NotFound"));
+const Premium = lazy(() => import("./components/Premium"));
 const Privacy = lazy(() => import("./components/Privacy"));
 const Terms = lazy(() => import("./components/Terms"));
 const VerificationLanding = lazy(
@@ -43,6 +44,7 @@ export default function () {
               <Route path="/link" element={<Link />} />
               <Route path="/login" element={<Login />} />
               <Route path="/me" element={<Me />} />
+              <Route path="/premium" element={<Premium />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/verify" element={<VerificationLanding />} />
