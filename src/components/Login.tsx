@@ -80,7 +80,7 @@ export default function () {
 
       window.location.assign(url);
     })();
-  });
+  }, []);
 
   switch (failed) {
     case false:

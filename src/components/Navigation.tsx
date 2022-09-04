@@ -78,7 +78,7 @@ export default function () {
 
       if (authCheckReq.ok) setUserData(await authCheckReq.json());
     })();
-  });
+  }, []);
 
   return (
     <>

@@ -7,7 +7,7 @@ export default function () {
       await new Promise((p) => setTimeout(p, 5000));
       window.location.assign("/");
     })();
-  });
+  }, []);
 
   return (
     <Container

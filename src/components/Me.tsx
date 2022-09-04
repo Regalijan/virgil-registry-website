@@ -172,7 +172,7 @@ export default function () {
 
       setData(await registryDataReq.json());
     })();
-  });
+  }, []);
 
   if (loading) return <Loading />;
 

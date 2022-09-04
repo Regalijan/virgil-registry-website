@@ -33,7 +33,7 @@ export default function () {
 
       window.location.assign("/verify-error");
     })();
-  });
+  }, []);
 
   return isLoading ? (
     <Loading />
