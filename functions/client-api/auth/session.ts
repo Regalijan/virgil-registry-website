@@ -109,7 +109,7 @@ export async function onRequestPost(
       redirect_uri: `${protocol}//${hostname}/login`,
     }).toString(),
     headers: {
-      authorization: btoa(`${env.DISCORD_ID}:${env.DISCORD_SECRET}`),
+      authorization: "Basic " + btoa(`${env.DISCORD_ID}:${env.DISCORD_SECRET}`),
       "content-type": "application/x-www-form-urlencoded",
     },
     method: "POST",
