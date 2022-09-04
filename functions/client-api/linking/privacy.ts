@@ -5,7 +5,7 @@ export async function onRequestPost(
     { [k: string]: any }
   >
 ) {
-  const { discord, roblox } = context.data;
+  const { discord, roblox } = context.data.body;
 
   if (!discord || !roblox)
     return new Response(
