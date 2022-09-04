@@ -54,6 +54,7 @@ export default function () {
         isClosable: true,
       });
     } else {
+      const updatedData: { username: string } = await refreshReq.json();
       toast({
         title: "Success",
         description: "We have refreshed your username",
@@ -61,8 +62,7 @@ export default function () {
         duration: 5000,
         isClosable: true,
       });
-      await new Promise((p) => setTimeout(p, 5500));
-      window.location.reload();
+      setData({ ...data, username: updatedData.username });
     }
   }
 

@@ -43,7 +43,9 @@ export async function onRequestPost(
     await verifyKV.put(context.data.user.id, JSON.stringify(verifyData));
   }
 
-  return new Response(null, {
-    status: 204,
+  return new Response(JSON.stringify({ username: rbxUserData.name }), {
+    headers: {
+      "content-type": "application/json",
+    },
   });
 }
