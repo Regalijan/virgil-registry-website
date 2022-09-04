@@ -10,6 +10,7 @@ const AboutPrivacySettings = lazy(
 );
 const Attributions = lazy(() => import("./components/Attributions"));
 const AUP = lazy(() => import("./components/AUP"));
+const Docs = lazy(() => import("./components/Docs"));
 const Home = lazy(() => import("./components/Home"));
 const Link = lazy(() => import("./components/Link"));
 const Login = lazy(() => import("./components/Login"));
@@ -38,6 +39,7 @@ export default function () {
               />
               <Route path="/attributions" element={<Attributions />} />
               <Route path="/aup" element={<AUP />} />
+              <Route path="/docs" element={<Link />} />
               <Route path="/link" element={<Link />} />
               <Route path="/login" element={<Login />} />
               <Route path="/me" element={<Me />} />
