@@ -8,7 +8,6 @@ export default function () {
   const [error, setError] = useState("");
   const { searchParams } = new URL(window.location.href);
   const code = searchParams.get("code");
-  const redirect_to = searchParams.get("state") ?? "/";
 
   useEffect(() => {
     if (localStorage.getItem("registry-session"))
@@ -46,7 +45,7 @@ export default function () {
 
         localStorage.setItem("registry-session", sessionData.session);
         sessionStorage.removeItem("code-verifier");
-        return window.location.assign(redirect_to);
+        return window.location.assign("/me");
       }
 
       let verifier = "";
