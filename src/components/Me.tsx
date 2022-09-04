@@ -165,7 +165,7 @@ export default function () {
       if (registryDataReq.status === 401)
         return window.location.assign("/login");
 
-      if (registryDataReq.status === 401)
+      if (registryDataReq.status === 404)
         return window.location.assign("/verify");
 
       if (!registryDataReq.ok) {
