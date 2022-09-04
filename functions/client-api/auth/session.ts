@@ -13,6 +13,15 @@ export async function onRequestDelete(
       status: 401,
     });
 
+  const tokenHash = await crypto.subtle.digest(
+    "SHA-512",
+    new TextEncoder().encode(token)
+  );
+
+  const encodedTokenHash = Array.from(new Uint8Array(tokenHash))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
   await SESSIONS.delete(token);
   return new Response(null, {
     status: 204,
