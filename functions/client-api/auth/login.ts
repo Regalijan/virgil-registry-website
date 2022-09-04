@@ -36,7 +36,9 @@ export async function onRequestPost(
     JSON.stringify({
       url: `https://discord.com/oauth2/authorize?client_id=${
         env.DISCORD_ID
-      }&code_challenge=&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
+      }&code_challenge=${
+        body.challenge
+      }&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
         `${protocol}//${hostname}/login`
       )}&response_type=code&scope=identify`,
     })
