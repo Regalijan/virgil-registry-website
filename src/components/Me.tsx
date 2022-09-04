@@ -19,128 +19,6 @@ import {
 import { useEffect, useState } from "react";
 import Loading from "./Loading";
 
-async function refreshUsername() {
-  const session = localStorage.getItem("registry-session");
-
-  if (!session) return window.location.assign("/login");
-
-  const refreshReq = await fetch("/client-api/linking/refresh", {
-    body: "{}",
-    headers: {
-      authorization: session,
-      "content-type": "application/json",
-    },
-    method: "POST",
-  });
-
-  if (refreshReq.status === 401) return window.location.assign("/login");
-
-  const toast = useToast();
-
-  if (!refreshReq.ok) {
-    toast({
-      title: "Oops",
-      description: "We were unable to refresh your username",
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-    });
-  } else {
-    toast({
-      title: "Success",
-      description: "We have refreshed your username",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
-    await new Promise((p) => setTimeout(p, 5500));
-    window.location.reload();
-  }
-}
-
-async function unverify() {
-  const session = localStorage.getItem("registry-session");
-
-  if (!session) return window.location.assign("/login");
-
-  const unverifyReq = await fetch("/client-api/linking/current", {
-    headers: {
-      authorization: session,
-    },
-    method: "DELETE",
-  });
-
-  if (unverifyReq.status === 401) return window.location.assign("/login");
-
-  const toast = useToast();
-
-  if (!unverifyReq.ok) {
-    toast({
-      title: "Oops",
-      description: "We were unable to unverify you",
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-    });
-  } else {
-    toast({
-      title: "Success",
-      description: "We have unverified you",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
-    await new Promise((p) => setTimeout(p, 5500));
-    window.location.assign("/verify");
-  }
-}
-
-async function updatePrivacy() {
-  const session = localStorage.getItem("registry-session");
-
-  if (!session) return window.location.assign("/login");
-
-  const discordElem = document.getElementById(
-    "discord-privacy"
-  ) as unknown as HTMLSelectElement;
-  const rbxElem = document.getElementById(
-    "rbx-privacy"
-  ) as unknown as HTMLSelectElement;
-  const discord = discordElem.selectedIndex;
-  const roblox = rbxElem.selectedIndex;
-  const toast = useToast();
-  const privacyUpdateReq = await fetch("/client-api/linking/privacy", {
-    body: JSON.stringify({ discord, roblox }),
-    headers: {
-      authorization: session,
-      "content-type": "application/json",
-    },
-    method: "POST",
-  });
-
-  if (privacyUpdateReq.status === 401) return window.location.assign("/login");
-
-  if (!privacyUpdateReq.ok) {
-    toast({
-      title: "Oops",
-      description: "We were unable to update your privacy settings",
-      status: "error",
-      duration: 5000,
-      isClosable: true,
-    });
-  } else {
-    toast({
-      title: "Success",
-      description: "We have updated your privacy settings",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
-    await new Promise((p) => setTimeout(p, 5500));
-    window.location.reload();
-  }
-}
-
 export default function () {
   const [data, setData]: [
     { [k: string]: any },
@@ -149,6 +27,129 @@ export default function () {
   const [errored, hasErrored] = useState(false);
   const [loading, isLoading] = useState(false);
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  async function refreshUsername() {
+    const session = localStorage.getItem("registry-session");
+
+    if (!session) return window.location.assign("/login");
+
+    const refreshReq = await fetch("/client-api/linking/refresh", {
+      body: "{}",
+      headers: {
+        authorization: session,
+        "content-type": "application/json",
+      },
+      method: "POST",
+    });
+
+    if (refreshReq.status === 401) return window.location.assign("/login");
+
+    const toast = useToast();
+
+    if (!refreshReq.ok) {
+      toast({
+        title: "Oops",
+        description: "We were unable to refresh your username",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "We have refreshed your username",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      await new Promise((p) => setTimeout(p, 5500));
+      window.location.reload();
+    }
+  }
+
+  async function unverify() {
+    const session = localStorage.getItem("registry-session");
+
+    if (!session) return window.location.assign("/login");
+
+    const unverifyReq = await fetch("/client-api/linking/current", {
+      headers: {
+        authorization: session,
+      },
+      method: "DELETE",
+    });
+
+    if (unverifyReq.status === 401) return window.location.assign("/login");
+
+    const toast = useToast();
+
+    if (!unverifyReq.ok) {
+      toast({
+        title: "Oops",
+        description: "We were unable to unverify you",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "We have unverified you",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      await new Promise((p) => setTimeout(p, 5500));
+      window.location.assign("/verify");
+    }
+  }
+
+  async function updatePrivacy() {
+    const session = localStorage.getItem("registry-session");
+
+    if (!session) return window.location.assign("/login");
+
+    const discordElem = document.getElementById(
+      "discord-privacy"
+    ) as unknown as HTMLSelectElement;
+    const rbxElem = document.getElementById(
+      "rbx-privacy"
+    ) as unknown as HTMLSelectElement;
+    const discord = discordElem.selectedIndex;
+    const roblox = rbxElem.selectedIndex;
+    const toast = useToast();
+    const privacyUpdateReq = await fetch("/client-api/linking/privacy", {
+      body: JSON.stringify({ discord, roblox }),
+      headers: {
+        authorization: session,
+        "content-type": "application/json",
+      },
+      method: "POST",
+    });
+
+    if (privacyUpdateReq.status === 401)
+      return window.location.assign("/login");
+
+    if (!privacyUpdateReq.ok) {
+      toast({
+        title: "Oops",
+        description: "We were unable to update your privacy settings",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "We have updated your privacy settings",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      await new Promise((p) => setTimeout(p, 5500));
+      window.location.reload();
+    }
+  }
 
   useEffect(() => {
     (async function () {
