@@ -193,7 +193,11 @@ export default function () {
               These settings control who is able to access your data via our
               API.
               <br />
-              <Link href="/about-privacy-settings" textDecor="underline">
+              <Link
+                href="/about-privacy-settings"
+                target="_blank"
+                textDecor="underline"
+              >
                 Read more about these settings.
               </Link>
             </Text>
