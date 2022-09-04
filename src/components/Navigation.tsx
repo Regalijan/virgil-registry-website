@@ -152,7 +152,6 @@ export default function () {
                   </Button>
                   <Avatar
                     display={userData.id ? "flex" : "none"}
-                    name={userData.username}
                     src={getAvatarUrl(userData)}
                   />
                   <Text>
@@ -201,7 +200,6 @@ export default function () {
           <br />
           <Avatar
             display={userData.id ? "" : "none"}
-            name={userData.username}
             src={getAvatarUrl(userData)}
           />
           <Text>
