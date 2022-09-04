@@ -2,6 +2,7 @@ import { Button, Container, Heading, Text, useToast } from "@chakra-ui/react";
 import createChallenge from "../challenge";
 
 async function initiateRBXSignIn() {
+  const state = crypto.randomUUID();
   let verifier = "";
 
   while (verifier.length < 128) {
@@ -9,6 +10,7 @@ async function initiateRBXSignIn() {
   }
 
   sessionStorage.setItem("rbx-code-verifier", verifier);
+  sessionStorage.setItem("rbx-state", state);
 
   const challenge = await createChallenge(verifier);
   const { hostname, protocol } = new URL(window.location.href);
@@ -38,7 +40,7 @@ async function initiateRBXSignIn() {
   window.location.assign(
     `https://authorize.roblox.com/?client_id=${client_id}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
       `${protocol}//${hostname}/link`
-    )}&response_type=code&scope=openid%20profile`
+    )}&response_type=code&scope=openid%20profile&state=${state}`
   );
 }
 

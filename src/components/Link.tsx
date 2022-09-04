@@ -12,9 +12,16 @@ export default function () {
       if (!session) return window.location.assign("/login");
 
       const code = new URLSearchParams(window.location.search).get("code");
+      const state = new URLSearchParams(window.location.search).get("state");
+      const storedState = sessionStorage.getItem("rbx-state");
       const verifier = sessionStorage.getItem("rbx-code-verifier");
 
       if (!code || !verifier) return window.location.assign("/verify");
+
+      if (state !== storedState) {
+        sessionStorage.clear();
+        return window.location.assign("/verify-error");
+      }
 
       const rbxConnectRequest = await fetch("/client-api/linking/connect", {
         body: JSON.stringify({ code, verifier }),
@@ -24,6 +31,8 @@ export default function () {
         },
         method: "POST",
       });
+
+      sessionStorage.clear();
 
       if (rbxConnectRequest.ok) {
         setLoading(false);
