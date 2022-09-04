@@ -54,11 +54,13 @@ export async function onRequestPost(
       }
     );
 
+  const tokenPart = id_token.split(".")[1];
+
   let decodedToken: { [k: string]: string };
 
   try {
     decodedToken = JSON.parse(
-      atob(id_token.replaceAll("-", "+").replaceAll("_", "/"))
+      atob(tokenPart.replaceAll("-", "+").replaceAll("_", "/"))
     );
   } catch {
     return new Response(
