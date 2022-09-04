@@ -116,12 +116,15 @@ export async function onRequestPost(
   });
 
   if (!tokenRequest.ok)
-    return new Response('{"error":"Failed to redeem code"}', {
-      headers: {
-        "content-type": "application/json",
-      },
-      status: 500,
-    });
+    return new Response(
+      `{"error":"Failed to redeem code. Details:\n${await tokenRequest.text()}"}`,
+      {
+        headers: {
+          "content-type": "application/json",
+        },
+        status: 500,
+      }
+    );
 
   const {
     access_token,
