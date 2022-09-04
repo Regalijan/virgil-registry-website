@@ -27,6 +27,7 @@ export default function () {
   const [errored, hasErrored] = useState(false);
   const [loading, isLoading] = useState(false);
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const toast = useToast();
 
   async function refreshUsername() {
     const session = localStorage.getItem("registry-session");
@@ -43,8 +44,6 @@ export default function () {
     });
 
     if (refreshReq.status === 401) return window.location.assign("/login");
-
-    const toast = useToast();
 
     if (!refreshReq.ok) {
       toast({
@@ -81,8 +80,6 @@ export default function () {
 
     if (unverifyReq.status === 401) return window.location.assign("/login");
 
-    const toast = useToast();
-
     if (!unverifyReq.ok) {
       toast({
         title: "Oops",
@@ -117,7 +114,6 @@ export default function () {
     ) as unknown as HTMLSelectElement;
     const discord = discordElem.selectedIndex;
     const roblox = rbxElem.selectedIndex;
-    const toast = useToast();
     const privacyUpdateReq = await fetch("/client-api/linking/privacy", {
       body: JSON.stringify({ discord, roblox }),
       headers: {
