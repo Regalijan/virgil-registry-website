@@ -7,7 +7,7 @@ export async function onRequestPost(
 ) {
   const { discord, roblox } = context.data.body;
 
-  if (!discord || !roblox)
+  if (typeof discord !== "number" || typeof roblox !== "number")
     return new Response(
       JSON.stringify({ error: "Missing required properties" }),
       {
