@@ -40,6 +40,11 @@ export default function () {
           information.
         </ListItem>
       </UnorderedList>
+      <br />
+      <Text>
+        The default privacy levels (set to Everyone for Discord-to-Roblox and
+        API key for Roblox-to-Discord) are applied when you verify your account.
+      </Text>
     </Container>
   );
 }
