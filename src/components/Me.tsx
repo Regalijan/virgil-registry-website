@@ -16,7 +16,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import Loading from "./Loading";
 
 export default function () {
@@ -170,7 +170,6 @@ export default function () {
       }
 
       setData(await registryDataReq.json());
-      onClose();
     })();
   }, []);
 
@@ -223,7 +222,14 @@ export default function () {
               </option>
             </Select>
             <br />
-            <Button onClick={async () => await updatePrivacy()}>Save</Button>
+            <Button
+              onClick={async () => {
+                await updatePrivacy();
+                onClose();
+              }}
+            >
+              Save
+            </Button>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
