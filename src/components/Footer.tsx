@@ -42,7 +42,7 @@ export default function () {
                 <Link href="https://virgil.gg">
                   <b>Virgil</b>
                 </Link>
-                <Link>
+                <Link href="/developers">
                   <b>Developers</b>
                 </Link>
               </Stack>
