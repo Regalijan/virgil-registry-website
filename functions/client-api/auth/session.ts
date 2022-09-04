@@ -188,6 +188,14 @@ export async function onRequestPost(
   }
 
   await SESSIONS.delete(`challenge_${challenge}`);
+  await fetch("https://discord.com/api/oauth2/token/revoke", {
+    body: `token=${access_token}&token_type_hint=access_token`,
+    headers: {
+      authorization: `Basic ${btoa(env.DISCORD_ID + ":" + env.DISCORD_SECRET)}`,
+      "content-type": "application/x-www-form-urlencoded",
+    },
+    method: "POST",
+  });
 
   return new Response(JSON.stringify({ session: sessionToken }), {
     headers: {
