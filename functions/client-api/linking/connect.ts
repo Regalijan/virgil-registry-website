@@ -55,6 +55,10 @@ export async function onRequestPost(
     JSON.stringify({
       id: parseInt(decodedToken.sub),
       username: decodedToken.name,
+      privacy: {
+        discord: 0,
+        roblox: 1,
+      },
     })
   );
 
