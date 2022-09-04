@@ -77,6 +77,8 @@ export default function () {
       });
 
       if (authCheckReq.ok) setUserData(await authCheckReq.json());
+      else if (authCheckReq.status === 401)
+        localStorage.removeItem("registry-session");
     })();
   }, []);
 
