@@ -121,7 +121,7 @@ export default function () {
             >
               <a href="/">
                 <img
-                  src="/logo.png"
+                  src="/logo44.png"
                   alt="Virgil Registry Logo"
                   style={{ width: "36px", borderRadius: "50%" }}
                 />
