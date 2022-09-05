@@ -16,6 +16,8 @@ export async function onRequestDelete(
       status: 404,
     });
 
+  await verifyKV.delete(context.data.user.id);
+
   const data = JSON.parse(verifyData);
   const reverseData: string[] = JSON.parse(
     (await verifyKV.get(data.id.toString())) ?? "[]"
