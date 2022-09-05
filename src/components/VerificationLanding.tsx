@@ -54,9 +54,7 @@ export default function () {
       <Text fontSize="xl">This will be quick, we promise.</Text>
       <br />
       <br />
-      <Text pb="10px" align="left" pl="15%">
-        Click the button to verify your account
-      </Text>
+      <Text pb="10px">Click the button to verify your account</Text>
       <Button
         alignSelf="center"
         mt="15px"
