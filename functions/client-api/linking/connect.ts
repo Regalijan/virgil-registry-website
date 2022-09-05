@@ -80,7 +80,7 @@ export async function onRequestPost(
     data.user.id,
     JSON.stringify({
       id: parseInt(decodedToken.sub),
-      username: decodedToken.name,
+      username: decodedToken.preferred_username,
       privacy: {
         discord: 0,
         roblox: 1,
