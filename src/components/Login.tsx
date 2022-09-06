@@ -73,6 +73,14 @@ export default function () {
       localStorage.removeItem("__test__");
       sessionStorage.removeItem("__test__");
 
+      if (typeof crypto["randomUUID"] !== "function") {
+        setError(
+          "Your browser is too old, you must update it to use this site."
+        );
+        hasFailed(true);
+        return;
+      }
+
       let verifier = "";
 
       while (verifier.length < 128) {
