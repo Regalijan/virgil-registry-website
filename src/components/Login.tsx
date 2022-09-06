@@ -48,6 +48,18 @@ export default function () {
         return window.location.assign("/me");
       }
 
+      sessionStorage.setItem("__test__", "__test__");
+
+      if (!sessionStorage.getItem("__test__")) {
+        setError(
+          'Storage is unavailable on this browser. If you are using a safari custom window, please tap the safari icon at the bottom. If you are using a chrome or other custom tab on android, please open the tab menu and tap on "Open in Browser".'
+        );
+        hasFailed(true);
+        return;
+      }
+
+      sessionStorage.removeItem("__test__");
+
       let verifier = "";
 
       while (verifier.length < 128) {
