@@ -48,9 +48,21 @@ export default function () {
         return window.location.assign("/me");
       }
 
-      sessionStorage.setItem("__test__", "__test__");
+      try {
+        localStorage.setItem("__test__", "_test__");
+        sessionStorage.setItem("__test__", "__test__");
+      } catch {
+        setError(
+          "Storage is disabled on this browser, you may need to enable cookies on your browser. On iOS you may need to disable private browsing."
+        );
+        hasFailed(true);
+        return;
+      }
 
-      if (!sessionStorage.getItem("__test__")) {
+      if (
+        !sessionStorage.getItem("__test__") ||
+        !localStorage.getItem("__test__")
+      ) {
         setError(
           'Storage is unavailable on this browser. If you are using a safari custom window, please tap the safari icon at the bottom. If you are using a chrome or other custom tab on android, please open the tab menu and tap on "Open in Browser".'
         );
@@ -58,6 +70,7 @@ export default function () {
         return;
       }
 
+      localStorage.removeItem("__test__");
       sessionStorage.removeItem("__test__");
 
       let verifier = "";
