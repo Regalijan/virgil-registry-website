@@ -39,9 +39,9 @@ export async function onRequestPost(
     });
 
   const {
-    access_token,
     id_token,
-  }: { access_token: string; id_token?: string } = await jwtFetch.json();
+    refresh_token,
+  }: { id_token?: string; refresh_token: string } = await jwtFetch.json();
 
   if (!id_token)
     return new Response(
@@ -96,7 +96,7 @@ export async function onRequestPost(
   await verifyKV.put(decodedToken.sub, JSON.stringify(reverseData));
 
   await fetch("https://apis.roblox.com/oauth/v1/token/revoke", {
-    body: `token=${access_token}`,
+    body: `token=${refresh_token}`,
     headers: {
       authorization: `Basic ${btoa(env.RBX_ID + ":" + env.RBX_SECRET)}`,
       "content-type": "application/x-www-form-urlencoded",
