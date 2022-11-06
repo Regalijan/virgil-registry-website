@@ -13,6 +13,11 @@ export async function onRequest(
       status: 400,
     });
 
+  if (authToken.split(" ")[1] === context.env.INTERNAL_KEY) {
+    context.data.is_internal = true;
+    return await context.next();
+  }
+
   const apiKeyHash = Array.from(
     new Uint8Array(
       await crypto.subtle.digest(
@@ -24,7 +29,10 @@ export async function onRequest(
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
-  context.data.apiKeyInfo = await context.env.API_KEYS.get(apiKeyHash, "json");
+  context.data.apiKeyInfo = (await context.env.API_KEYS.get(
+    apiKeyHash,
+    "json"
+  )) as APIKey;
 
   if (!context.data.apiKeyInfo)
     return new Response('{"error":"Invalid token"}', {
