@@ -96,7 +96,7 @@ export default function () {
       <br />
       <Heading size="md">Status Codes</Heading>
       <br />
-      <Text>The list of possible error status codes is as follows:</Text>
+      <Text>The list of possible status codes is as follows:</Text>
       <UnorderedList>
         <ListItem>200: All is well</ListItem>
         <ListItem>
