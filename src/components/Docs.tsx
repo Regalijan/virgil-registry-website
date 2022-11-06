@@ -116,7 +116,8 @@ export default function () {
       <br />
       <Text>
         To send authenticated requests, you must pass the API key in the{" "}
-        <Code>authorization</Code> header.
+        <Code>authorization</Code> header with the <Code>Bearer</Code> token
+        type.
       </Text>
       <br />
       <Heading size="md">Rate Limiting</Heading>
