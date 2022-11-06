@@ -38,7 +38,7 @@ async function initiateRBXSignIn() {
   }
 
   window.location.assign(
-    `https://authorize.roblox.com/?client_id=${client_id}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
+    `https://apis.roblox.com/oauth/v1/authorize?client_id=${client_id}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
       `${protocol}//${hostname}/link`
     )}&response_type=code&scope=openid%20profile&state=${state}`
   );
