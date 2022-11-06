@@ -2,7 +2,7 @@ export async function onRequestGet(
   context: EventContext<Env, string, { [k: string]: any }>
 ) {
   const locatedUser: User | null = await context.env.VERIFICATIONS.get(
-    "",
+    context.params.id as string,
     "json"
   );
   const { data } = context;
