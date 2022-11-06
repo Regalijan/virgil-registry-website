@@ -35,7 +35,7 @@ export default function () {
           <br />
           <Button
             alignSelf="left"
-            colorScheme="teal"
+            background="red.700"
             size="lg"
             onClick={() => window.location.assign("/me")}
           >
