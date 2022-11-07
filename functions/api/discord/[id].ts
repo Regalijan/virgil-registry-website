@@ -1,3 +1,5 @@
+import makeResponse from "../makeResponse";
+
 export async function onRequestGet(
   context: EventContext<Env, string, { [k: string]: any }>
 ) {

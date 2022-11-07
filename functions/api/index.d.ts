@@ -1,12 +1,3 @@
-function makeResponse(body: { [k: string]: any }, status: number) {
-  return new Response(JSON.stringify(body), {
-    headers: {
-      "content-type": "application/json",
-    },
-    status,
-  });
-}
-
 interface APIKey {
   access_level: number;
   created_at: number;
