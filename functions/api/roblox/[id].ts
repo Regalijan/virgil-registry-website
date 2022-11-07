@@ -27,7 +27,7 @@ export async function onRequestGet(
 
     if (!user) continue;
 
-    if ((user.privacy?.discord as number) > data.apiKeyInfo.access_level)
+    if ((user.privacy?.discord as number) > data.apiKeyInfo?.access_level)
       continue;
 
     delete user.privacy;
