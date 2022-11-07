@@ -27,7 +27,7 @@ export async function onRequestGet(
 
     if (!user) continue;
 
-    if ((user.privacy?.roblox as number) < data.apiKeyInfo?.access_level) {
+    if ((user.privacy?.roblox as number) <= data.apiKeyInfo?.access_level) {
       delete user.privacy;
       usersToReturn.push(userId);
     }    
