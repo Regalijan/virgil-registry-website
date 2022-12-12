@@ -40,7 +40,7 @@ export async function onRequestPost(
         body.challenge
       }&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
         `${protocol}//${hostname}/login`
-      )}&response_type=code&scope=identify`,
+      )}&response_type=code&scope=identify%20role_connections.write`,
     })
   );
 }
