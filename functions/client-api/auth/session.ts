@@ -22,7 +22,7 @@ export async function onRequestDelete(
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
-  await SESSIONS.delete(token);
+  await SESSIONS.delete(encodedTokenHash);
   return new Response(null, {
     status: 204,
   });
@@ -175,7 +175,10 @@ export async function onRequestPost(
       Array.from(new Uint8Array(tokenHash))
         .map((b) => b.toString(16).padStart(2, "0"))
         .join(""),
-      await currentUserRequest.text(),
+      JSON.stringify({
+        ...((await currentUserRequest.json()) as { [k: string]: any }),
+        access_token,
+      }),
       { expirationTtl: 3600 }
     );
   } catch {
