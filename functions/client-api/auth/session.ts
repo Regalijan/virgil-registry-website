@@ -68,9 +68,9 @@ export async function onRequestPost(
     });
   }
 
-  if (!body.code || !body.verifier)
+  if (!body.code)
     return new Response(
-      JSON.stringify({ error: '"code" or "verifier" property is missing' }),
+      JSON.stringify({ error: "Authorization code is missing" }),
       {
         headers: {
           "content-type": "application/json",
@@ -79,41 +79,10 @@ export async function onRequestPost(
       }
     );
 
-  const challenge = btoa(
-    String.fromCharCode(
-      ...new Uint8Array(
-        await crypto.subtle.digest(
-          "SHA-256",
-          new TextEncoder().encode(body.verifier)
-        )
-      )
-    )
-  )
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=/g, "");
-
-  const challengeIP = await SESSIONS.get(`challenge_${challenge}`);
-
-  if (challengeIP !== request.headers.get("CF-Connecting-IP"))
-    return new Response(
-      JSON.stringify({
-        error:
-          "Your current IP address does not match the one used to generate the sign-in link.",
-      }),
-      {
-        headers: {
-          "content-type": "application/json",
-        },
-        status: 401,
-      }
-    );
-
   const { hostname, protocol } = new URL(request.url);
   const tokenRequest = await fetch("https://discord.com/api/oauth2/token", {
     body: new URLSearchParams({
       code: body.code,
-      code_verifier: body.verifier,
       grant_type: "authorization_code",
       redirect_uri: `${protocol}//${hostname}/login`,
     }).toString(),
@@ -189,8 +158,6 @@ export async function onRequestPost(
       status: 500,
     });
   }
-
-  await SESSIONS.delete(`challenge_${challenge}`);
 
   return new Response(JSON.stringify({ session: sessionToken }), {
     headers: {
