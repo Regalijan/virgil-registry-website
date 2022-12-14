@@ -41,6 +41,24 @@ export async function onRequestPost(
   if (verifyData.username !== rbxUserData.name) {
     verifyData.username = rbxUserData.name;
     await verifyKV.put(context.data.user.id, JSON.stringify(verifyData));
+
+    await fetch(
+      `https://discord.com/api/v10/users/@me/applications/${context.env.DISCORD_ID}/role-connection`,
+      {
+        body: JSON.stringify({
+          metadata: {
+            verified: true,
+          },
+          platform_name: "Roblox",
+          platform_username: rbxUserData.name,
+        }),
+        headers: {
+          authorization: `Bearer ${context.data.user.access_token}`,
+          "content-type": "application/json",
+        },
+        method: "PUT",
+      }
+    );
   }
 
   return new Response(JSON.stringify({ username: rbxUserData.name }), {
