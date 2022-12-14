@@ -18,6 +18,18 @@ export async function onRequestDelete(
 
   await verifyKV.delete(context.data.user.id);
 
+  await fetch(
+    `https://discord.com/api/v10/users/@me/applications/${context.env.DISCORD_ID}/role-connection`,
+    {
+      body: "{}",
+      headers: {
+        authorization: `Bearer ${context.data.user.access_token}`,
+        "content-type": "application/json",
+      },
+      method: "PUT",
+    }
+  );
+
   const data = JSON.parse(verifyData);
   const reverseData: string[] = JSON.parse(
     (await verifyKV.get(data.id.toString())) ?? "[]"
