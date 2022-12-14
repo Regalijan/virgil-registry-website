@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container, Heading, Text } from "@chakra-ui/react";
 import Loading from "./Loading";
-import createChallenge from "../challenge";
 
 export default function () {
   const [failed, hasFailed] = useState(false);
@@ -14,15 +13,9 @@ export default function () {
       return window.location.assign("/me");
     (async function () {
       if (searchParams.get("code")) {
-        if (!sessionStorage.getItem("code-verifier")) {
-          setError("Code verifier missing");
-          return hasFailed(true);
-        }
-
         const exchangeResponse = await fetch("/client-api/auth/session", {
           body: JSON.stringify({
             code,
-            verifier: sessionStorage.getItem("code-verifier"),
           }),
           cache: "no-cache",
           headers: {
@@ -44,7 +37,6 @@ export default function () {
         const sessionData: { session: string } = await exchangeResponse.json();
 
         localStorage.setItem("registry-session", sessionData.session);
-        sessionStorage.removeItem("code-verifier");
         return window.location.assign("/me");
       }
 
@@ -81,23 +73,7 @@ export default function () {
         return;
       }
 
-      let verifier = "";
-
-      while (verifier.length < 128) {
-        verifier += crypto.randomUUID().replace(/-/g, "");
-      }
-
-      sessionStorage.setItem("code-verifier", verifier);
-
-      const challenge = await createChallenge(verifier);
-
-      const urlRequest = await fetch("/client-api/auth/login", {
-        body: JSON.stringify({ challenge }),
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-      });
+      const urlRequest = await fetch("/client-api/auth/login");
 
       let url: string | undefined;
 
