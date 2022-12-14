@@ -109,7 +109,7 @@ export async function onRequestPost(
     {
       body: JSON.stringify({
         metadata: {
-          verified: true,
+          verified: 1,
         },
         platform_name: "Roblox",
         platform_username: decodedToken.preferred_username,
