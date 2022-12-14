@@ -104,6 +104,24 @@ export async function onRequestPost(
     method: "POST",
   });
 
+  await fetch(
+    `https://discord.com/api/v10/users/@me/applications/${env.DISCORD_ID}/role-connection`,
+    {
+      body: JSON.stringify({
+        metadata: {
+          verified: true,
+        },
+        platform_name: "Roblox",
+        platform_username: decodedToken.preferred_username,
+      }),
+      headers: {
+        authorization: `Bearer ${data.user.access_token}`,
+        "content-type": "application/json",
+      },
+      method: "PUT",
+    }
+  );
+
   return new Response(null, {
     status: 204,
   });
