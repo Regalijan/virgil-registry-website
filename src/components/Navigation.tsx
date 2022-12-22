@@ -205,7 +205,7 @@ export default function () {
               src={getAvatarUrl(userData)}
             />
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <Text align="center">
+            <Text align="center" style={{ overflowWrap: "anywhere" }}>
               {userData.id
                 ? `${userData.username}#${userData.discriminator}`
                 : ""}
