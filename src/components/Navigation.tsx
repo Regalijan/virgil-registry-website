@@ -187,46 +187,48 @@ export default function () {
       </Box>
       <Drawer isOpen={isOpen} onClose={onClose} placement="left">
         <DrawerOverlay />
-        <DrawerContent p="2vh">
+        <DrawerContent gap="2vh" p="2vh">
           <CloseButton onClick={onClose} />
-          <br />
           <Link href="/premium">Premium</Link>
-          <br />
           <Link href="https://discord.com/invite/carcrushers">Support</Link>
-          <br />
           <Link href="/docs">Docs</Link>
-          <br />
           <Link href={userData.id ? "/me" : "/login"}>
             {userData.id ? "Manage" : "Sign In"}
           </Link>
-          <br />
-          <Avatar
-            display={userData.id ? "" : "none"}
-            src={getAvatarUrl(userData)}
-          />
-          <Text>
-            {userData.id
-              ? `${userData.username}#${userData.discriminator}`
-              : ""}
-          </Text>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            style={{ display: userData.id ? "block" : "none" }}
-            onClick={async () => await revokeSession()}
-          >
-            <path
-              fillRule="evenodd"
-              d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"
+          <HStack spacing="3">
+            <Avatar
+              display={userData.id ? "" : "none"}
+              src={getAvatarUrl(userData)}
             />
-            <path
-              fillRule="evenodd"
-              d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"
-            />
-          </svg>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <Text align="center">
+              {userData.id
+                ? `${userData.username}#${userData.discriminator}`
+                : ""}
+            </Text>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+              style={{
+                cursor: "pointer",
+                display: userData.id ? "block" : "none",
+              }}
+              onClick={async () => await revokeSession()}
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"
+              />
+              <path
+                fillRule="evenodd"
+                d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"
+              />
+            </svg>
+          </HStack>
         </DrawerContent>
       </Drawer>
     </>
