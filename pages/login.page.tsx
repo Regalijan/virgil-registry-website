@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { Container, Heading, Text } from "@chakra-ui/react";
-import Loading from "./Loading";
+import Loading from "../components/Loading";
 
-export default function () {
+export function Page() {
   const [failed, hasFailed] = useState(false);
   const [error, setError] = useState("");
-  const { searchParams } = new URL(window.location.href);
-  const code = searchParams.get("code");
 
   useEffect(() => {
-    if (localStorage.getItem("registry-session"))
-      return window.location.assign("/me");
+    const { searchParams } = new URL(window.location.href);
+    const code = searchParams.get("code");
+
     (async function () {
       if (searchParams.get("code")) {
         const exchangeResponse = await fetch("/client-api/auth/session", {
@@ -34,14 +33,10 @@ export default function () {
           return hasFailed(true);
         }
 
-        const sessionData: { session: string } = await exchangeResponse.json();
-
-        localStorage.setItem("registry-session", sessionData.session);
         return window.location.assign("/me");
       }
 
       try {
-        localStorage.setItem("__test__", "_test__");
         sessionStorage.setItem("__test__", "__test__");
       } catch {
         setError(
@@ -51,10 +46,7 @@ export default function () {
         return;
       }
 
-      if (
-        !sessionStorage.getItem("__test__") ||
-        !localStorage.getItem("__test__")
-      ) {
+      if (!sessionStorage.getItem("__test__")) {
         setError(
           'Storage is unavailable on this browser. If you are using a safari custom window, please tap the safari icon at the bottom. If you are using a chrome or other custom tab on android, please open the tab menu and tap on "Open in Browser".'
         );
@@ -62,7 +54,6 @@ export default function () {
         return;
       }
 
-      localStorage.removeItem("__test__");
       sessionStorage.removeItem("__test__");
 
       if (typeof crypto["randomUUID"] !== "function") {
@@ -73,26 +64,20 @@ export default function () {
         return;
       }
 
-      const urlRequest = await fetch("/client-api/auth/login");
-
-      let url: string | undefined;
-
-      try {
-        url = ((await urlRequest.json()) as { url?: string }).url;
-      } catch {}
-
-      if (!url) {
-        setError("Failed to retrieve sign-in URL");
-        return hasFailed(true);
-      }
-
-      window.location.assign(url);
+      window.location.assign(
+        `https://discord.com/oauth2/authorize?client_id=${
+          import.meta.env.VITE_DISCORD_CLIENT_ID
+        }&redirect_uri=${encodeURIComponent(
+          location.href
+        )}&response_type=code&scope=identify%20role_connections.write`
+      );
     })();
   }, []);
 
   switch (failed) {
     case false:
       return <Loading />;
+
     case true:
       return (
         <Container maxW="container.xl" pt="10vh" textAlign="center">

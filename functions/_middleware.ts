@@ -1,10 +1,10 @@
 import { renderPage } from "vite-plugin-ssr";
+import generateHash from "./generate_hash";
 
 async function constructHTML(context: RequestContext) {
-  const { pathname } = new URL(context.request.url);
+  const { host, pathname, protocol } = new URL(context.request.url);
 
-  if (pathname.startsWith("/api/") || pathname.startsWith("/client-api/"))
-    return await context.next();
+  if (pathname.startsWith("/api/")) return await context.next();
 
   if (
     pathname.startsWith("/assets/") ||
@@ -13,12 +13,15 @@ async function constructHTML(context: RequestContext) {
   )
     return await context.env.ASSETS.fetch(context.request);
 
-  const { httpResponse, status } = await renderPage({
-    current_user: context.data.current_user,
-    kv: context.env.DATA,
+  const { httpResponse, redirect_to_login, status } = await renderPage({
+    user: context.data.user,
+    redirect_to_login: false,
     status: 200,
     urlOriginal: context.request.url,
+    verifyKV: context.env.VERIFICATIONS,
   });
+
+  if (redirect_to_login) return Response.redirect(`${protocol}//${host}/login`);
 
   return new Response(httpResponse?.getReadableWebStream(), {
     headers: {
@@ -30,4 +33,31 @@ async function constructHTML(context: RequestContext) {
   });
 }
 
-export const onRequest = [constructHTML];
+async function setUser(context: RequestContext) {
+  if (new URL(context.request.url).pathname.startsWith("/api/"))
+    return await context.next();
+
+  const cookies = context.request.headers.get("cookie");
+
+  if (!cookies) return await context.next();
+
+  const cookieList = cookies.split(/; /);
+
+  for (const c of cookieList) {
+    const [name, value] = c.split("=");
+
+    if (name !== "vrs") continue;
+
+    const userData = await context.env.SESSIONS.get(
+      `auth_${await generateHash(value)}`
+    );
+
+    if (userData) context.data.user = JSON.parse(userData);
+
+    break;
+  }
+
+  return await context.next();
+}
+
+export const onRequest = [setUser, constructHTML];

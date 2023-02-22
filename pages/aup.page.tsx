@@ -1,6 +1,6 @@
 import { Container, Heading, Text } from "@chakra-ui/react";
 
-export default function () {
+export function Page() {
   return (
     <Container maxW="container.md" pb="100px" textAlign="left">
       <Heading textAlign="center">Acceptable Use Policy</Heading>

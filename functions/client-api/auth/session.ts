@@ -1,45 +1,35 @@
-export async function onRequestDelete(
-  context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>
-) {
-  const { env, request } = context;
-  const SESSIONS = env.SESSIONS as unknown as KVNamespace;
-  const token = await request.headers.get("authorization");
+import generateHash from "../../generate_hash";
 
-  if (!token)
-    return new Response('{"error":"Missing token"}', {
+export async function onRequestDelete(context: RequestContext) {
+  const { env, request } = context;
+  const SESSIONS = env.SESSIONS;
+  const cookies = await request.headers.get("cookie")?.split("; ");
+
+  if (!cookies)
+    return new Response('{"error":"Not logged in"}', {
       headers: {
         "content-type": "application/json",
       },
       status: 401,
     });
 
-  const tokenHash = await crypto.subtle.digest(
-    "SHA-512",
-    new TextEncoder().encode(token)
-  );
+  for (const cookie of cookies) {
+    const [name, value] = cookie.split("=");
 
-  const encodedTokenHash = Array.from(new Uint8Array(tokenHash))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+    if (name !== "vsr") continue;
 
-  await SESSIONS.delete(encodedTokenHash);
+    await SESSIONS.delete(await generateHash(value));
+
+    return new Response(null, {
+      headers: {
+        "set-cookie": "vsr=; Max-Age=0",
+      },
+      status: 204,
+    });
+  }
+
   return new Response(null, {
     status: 204,
-  });
-}
-
-export async function onRequestGet(
-  context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>
-) {
-  const [body, status] = context.data.user
-    ? [context.data.user, 200]
-    : [{ error: "Unauthenticated" }, 401];
-
-  return new Response(JSON.stringify(body), {
-    headers: {
-      "content-type": "application/json",
-    },
-    status,
   });
 }
 
@@ -159,9 +149,10 @@ export async function onRequestPost(
     });
   }
 
-  return new Response(JSON.stringify({ session: sessionToken }), {
+  return new Response(null, {
     headers: {
-      "content-type": "application/json",
+      "set-cookie": `vsr=${sessionToken}; HttpOnly; Max-Age=3600; Path=/; SameSite=Lax; Secure`,
     },
+    status: 204,
   });
 }

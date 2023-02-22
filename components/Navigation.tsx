@@ -17,7 +17,6 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 
 function getAvatarUrl(userData: { [k: string]: any }): string {
   const BASE = "https://cdn.discordapp.com/";
@@ -30,23 +29,17 @@ function getAvatarUrl(userData: { [k: string]: any }): string {
   return BASE + `avatars/${userData.id}/${userData.avatar}`;
 }
 
-export default function () {
+export default function (props: {
+  avatar?: string;
+  discriminator?: string;
+  id?: string;
+  username?: string;
+}) {
   const isDesktop = useBreakpointValue({ base: false, lg: true });
-  const [userData, setUserData]: [
-    { [k: string]: any },
-    React.Dispatch<React.SetStateAction<{ [k: string]: any }>>
-  ] = useState({});
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   async function revokeSession() {
-    const session = localStorage.getItem("registry-session");
-
-    if (!session) return setUserData({});
-
     const revokeReq = await fetch("/client-api/auth/session", {
-      headers: {
-        authorization: session,
-      },
       method: "DELETE",
     });
 
@@ -60,27 +53,8 @@ export default function () {
       });
     }
 
-    localStorage.removeItem("registry-session");
-    setUserData({});
+    location.assign("/");
   }
-
-  useEffect(() => {
-    (async function () {
-      const session = localStorage.getItem("registry-session");
-
-      if (!session) return;
-
-      const authCheckReq = await fetch("/client-api/auth/session", {
-        headers: {
-          authorization: session,
-        },
-      });
-
-      if (authCheckReq.ok) setUserData(await authCheckReq.json());
-      else if (authCheckReq.status === 401)
-        localStorage.removeItem("registry-session");
-    })();
-  }, []);
 
   return (
     <>
@@ -147,22 +121,20 @@ export default function () {
                 <HStack spacing="3">
                   <Button
                     onClick={() =>
-                      window.location.assign(userData.id ? "/me" : "/login")
+                      window.location.assign(props.id ? "/me" : "/login")
                     }
                   >
-                    {userData.id ? "Manage" : "Sign In"}
+                    {props.id ? "Manage" : "Sign In"}
                   </Button>
                   <Avatar
-                    display={userData.id ? "flex" : "none"}
-                    src={getAvatarUrl(userData)}
+                    display={props.id ? "flex" : "none"}
+                    src={getAvatarUrl(props)}
                   />
                   <Text>
-                    {userData.id
-                      ? `${userData.username}#${userData.discriminator}`
-                      : ""}
+                    {props.id ? `${props.username}#${props.discriminator}` : ""}
                   </Text>
                   <Button
-                    style={{ display: userData.id ? "block" : "none" }}
+                    style={{ display: props.id ? "block" : "none" }}
                     variant="ghost"
                   >
                     <svg
@@ -196,19 +168,17 @@ export default function () {
           <Link href="/premium">Premium</Link>
           <Link href="https://discord.com/invite/carcrushers">Support</Link>
           <Link href="/docs">Docs</Link>
-          <Link href={userData.id ? "/me" : "/login"}>
-            {userData.id ? "Manage" : "Sign In"}
+          <Link href={props.id ? "/me" : "/login"}>
+            {props.id ? "Manage" : "Sign In"}
           </Link>
           <HStack spacing="3">
             <Avatar
-              display={userData.id ? "" : "none"}
-              src={getAvatarUrl(userData)}
+              display={props.id ? "" : "none"}
+              src={getAvatarUrl(props)}
             />
             &nbsp;&nbsp;&nbsp;&nbsp;
             <Text align="center" style={{ overflowWrap: "anywhere" }}>
-              {userData.id
-                ? `${userData.username}#${userData.discriminator}`
-                : ""}
+              {props.id ? `${props.username}#${props.discriminator}` : ""}
             </Text>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <svg
@@ -219,7 +189,7 @@ export default function () {
               viewBox="0 0 16 16"
               style={{
                 cursor: "pointer",
-                display: userData.id ? "block" : "none",
+                display: props.id ? "block" : "none",
               }}
               onClick={async () => await revokeSession()}
             >

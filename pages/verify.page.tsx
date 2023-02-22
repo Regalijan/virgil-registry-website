@@ -1,4 +1,5 @@
-import { Button, Container, Heading, Text, useToast } from "@chakra-ui/react";
+import { Button, Container, Heading, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
 import createChallenge from "../challenge";
 
 async function initiateRBXSignIn() {
@@ -15,37 +16,19 @@ async function initiateRBXSignIn() {
   const challenge = await createChallenge(verifier);
   const { hostname, protocol } = new URL(window.location.href);
 
-  const clientIdRequest = await fetch("/client-api/linking/initiate", {
-    headers: {
-      authorization: window.localStorage.getItem("registry-session") ?? "",
-    },
-  });
-
-  const { client_id }: { client_id: string } = await clientIdRequest.json();
-
-  if (clientIdRequest.status === 401) return window.location.assign("/login");
-
-  if (!clientIdRequest.ok) {
-    useToast()({
-      title: "Uh oh!",
-      status: "error",
-      description:
-        "We were unable to fetch the client id needed to verify you.",
-      isClosable: true,
-      duration: 10000,
-    });
-    return;
-  }
-
   window.location.assign(
-    `https://apis.roblox.com/oauth/v1/authorize?client_id=${client_id}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
+    `https://apis.roblox.com/oauth/v1/authorize?client_id=${
+      import.meta.env.VITE_ROBLOX_CLIENT_ID
+    }&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
       `${protocol}//${hostname}/link`
     )}&response_type=code&scope=openid%20profile&state=${state}`
   );
 }
 
-export default function () {
-  if (!localStorage.getItem("registry-session")) window.location.assign("/");
+export function Page(pageProps: { verified: boolean }) {
+  useEffect(() => {
+    if (pageProps.verified) return location.assign("/me");
+  });
 
   return (
     <Container pt="40px" maxW="28em">

@@ -16,28 +16,27 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { MouseEvent, useEffect, useState } from "react";
-import Loading from "./Loading";
+import { type Dispatch, type SetStateAction, useState } from "react";
 
-export default function () {
-  const [data, setData]: [
-    { [k: string]: any },
-    React.Dispatch<React.SetStateAction<{ [k: string]: any }>>
-  ] = useState({});
-  const [errored, hasErrored] = useState(false);
-  const [loading, isLoading] = useState(false);
+export function Page(pageProps: {
+  privacy?: {
+    discord: number;
+    roblox: number;
+  };
+  roblox_avatar?: string;
+  roblox_username?: string;
+}) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const toast = useToast();
+  const [data, setData]: [
+    typeof pageProps,
+    Dispatch<SetStateAction<typeof pageProps>>
+  ] = useState(pageProps);
 
   async function refreshUsername() {
-    const session = localStorage.getItem("registry-session");
-
-    if (!session) return window.location.assign("/login");
-
     const refreshReq = await fetch("/client-api/linking/refresh", {
       body: "{}",
       headers: {
-        authorization: session,
         "content-type": "application/json",
       },
       method: "POST",
@@ -54,7 +53,9 @@ export default function () {
         isClosable: true,
       });
     } else {
-      const updatedData: { username: string } = await refreshReq.json();
+      const updatedData: { roblox_avatar?: string; roblox_username: string } =
+        await refreshReq.json();
+
       toast({
         title: "Success",
         description: "We have refreshed your username",
@@ -62,19 +63,12 @@ export default function () {
         duration: 5000,
         isClosable: true,
       });
-      setData({ ...data, username: updatedData.username });
+      setData({ ...data, ...updatedData });
     }
   }
 
   async function unverify() {
-    const session = localStorage.getItem("registry-session");
-
-    if (!session) return window.location.assign("/login");
-
     const unverifyReq = await fetch("/client-api/linking/current", {
-      headers: {
-        authorization: session,
-      },
       method: "DELETE",
     });
 
@@ -102,10 +96,6 @@ export default function () {
   }
 
   async function updatePrivacy() {
-    const session = localStorage.getItem("registry-session");
-
-    if (!session) return window.location.assign("/login");
-
     const discordElem = document.getElementById(
       "discord-privacy"
     ) as unknown as HTMLSelectElement;
@@ -117,7 +107,6 @@ export default function () {
     const privacyUpdateReq = await fetch("/client-api/linking/privacy", {
       body: JSON.stringify({ discord, roblox }),
       headers: {
-        authorization: session,
         "content-type": "application/json",
       },
       method: "POST",
@@ -146,42 +135,7 @@ export default function () {
     }
   }
 
-  useEffect(() => {
-    (async function () {
-      const session = localStorage.getItem("registry-session");
-
-      if (!session) return window.location.assign("/login");
-
-      const registryDataReq = await fetch("/client-api/linking/current", {
-        headers: {
-          authorization: session,
-        },
-      });
-
-      if (registryDataReq.status === 401)
-        return window.location.assign("/login");
-
-      if (registryDataReq.status === 404)
-        return window.location.assign("/verify");
-
-      if (!registryDataReq.ok) {
-        hasErrored(true);
-        return isLoading(false);
-      }
-
-      setData(await registryDataReq.json());
-    })();
-  }, []);
-
-  if (loading) return <Loading />;
-
-  return errored ? (
-    <Container textAlign="center">
-      <Heading>Oops!</Heading>
-      <br />
-      <Text>We were unable to load your profile; refresh to try again.</Text>
-    </Container>
-  ) : (
+  return (
     <Container pt="5vh">
       <Drawer isOpen={isOpen} onClose={onClose} placement="left">
         <DrawerOverlay />
@@ -241,10 +195,10 @@ export default function () {
         alt="Your Roblox avatar"
         boxSize="180px"
         display="initial"
-        src={data.avatar}
+        src={data.roblox_avatar}
       />
       <br />
-      <Heading>Hello {data.username}!</Heading>
+      <Heading>Hello {data.roblox_username}!</Heading>
       <br />
       <br />
       <br />

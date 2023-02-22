@@ -9,20 +9,28 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useLayoutEffect, useState } from "react";
+import Loading from "../components/Loading";
 
-export default function () {
-  const [desktop, setDesktop] = useState(screen.availWidth > 900);
-  const [pb, setpb] = useState(screen.availWidth > 900 ? "0" : "40px");
+export function Page() {
+  const [loading, setLoading] = useState(true);
+  const [desktop, setDesktop] = useState(false);
+  const [pb, setpb] = useState("40px");
 
   useLayoutEffect(() => {
-    window.addEventListener("resize", function () {
+    function readjust() {
       const isDesktop = screen.availWidth > 900;
       setpb(isDesktop ? "0" : "40px");
       setDesktop(isDesktop);
-    });
+    }
+
+    readjust();
+    window.addEventListener("resize", readjust);
+    setLoading(false);
   });
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <>
       <Box alignContent="left">
         <Container maxW="container.xl" textAlign="left" paddingTop="8vh">

@@ -12,7 +12,11 @@ declare global {
 
   type RequestContext = EventContext<Env, string, { [k: string]: any }>;
   interface PageContext extends PageContextBuiltIn {
+    pageProps: {
+      [k: string]: any;
+    };
     status: number;
     user?: { [k: string]: any };
+    verifyKV: KVNamespace;
   }
 }

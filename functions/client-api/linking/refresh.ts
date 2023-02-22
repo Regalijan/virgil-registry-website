@@ -35,8 +35,11 @@ export async function onRequestPost(
     );
 
   const rbxUserData: {
+    id: number;
     name: string;
   } = await usernameCheckReq.json();
+
+  const response_obj = { roblox_username: rbxUserData.name };
 
   if (verifyData.username !== rbxUserData.name) {
     verifyData.username = rbxUserData.name;
@@ -59,9 +62,19 @@ export async function onRequestPost(
         method: "PUT",
       }
     );
+
+    const thumbFetch = await fetch(
+      `https://thumbnails.roblox.com/v1/users/avatar?userIds=${rbxUserData.id}&size=180x180&format=Png`
+    );
+
+    if (thumbFetch.ok)
+      Object.defineProperty(response_obj, "roblox_avatar", {
+        value: ((await thumbFetch.json()) as { data: { [k: string]: any }[] })
+          .data[0].imageUrl,
+      });
   }
 
-  return new Response(JSON.stringify({ username: rbxUserData.name }), {
+  return new Response(JSON.stringify(response_obj), {
     headers: {
       "content-type": "application/json",
     },
