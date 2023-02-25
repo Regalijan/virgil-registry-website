@@ -19,7 +19,7 @@ export default function () {
       >
         <Stack spacing={{ base: "6", md: "8" }} align="start">
           <img
-            src="/logo128.png"
+            src="/files/logo128.png"
             width="128"
             height="128"
             alt="Virgil Registry Logo"

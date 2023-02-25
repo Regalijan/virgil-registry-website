@@ -1,8 +1,26 @@
 import { useEffect, useState } from "react";
 import { Container, Heading, Text } from "@chakra-ui/react";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
+import { useLoaderData } from "@remix-run/react";
 
-export function Page() {
+export async function loader({
+  context,
+}: {
+  context: RequestContext;
+}) {
+  if (context.data?.user)
+    throw new Response(null, {
+      headers: {
+        location: "/me",
+      },
+      status: 303,
+    });
+
+  return context.env.DISCORD_ID;
+}
+
+export default function () {
+  const discordClientId = useLoaderData<typeof loader>();
   const [failed, hasFailed] = useState(false);
   const [error, setError] = useState("");
 
@@ -65,9 +83,7 @@ export function Page() {
       }
 
       window.location.assign(
-        `https://discord.com/oauth2/authorize?client_id=${
-          import.meta.env.VITE_DISCORD_CLIENT_ID
-        }&redirect_uri=${encodeURIComponent(
+        `https://discord.com/oauth2/authorize?client_id=${discordClientId}&redirect_uri=${encodeURIComponent(
           location.href
         )}&response_type=code&scope=identify%20role_connections.write`
       );

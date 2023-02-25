@@ -1,33 +1,57 @@
 import { Container, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
+import { useLoaderData } from "@remix-run/react";
 
-export function Page() {
+function createRedirect(location: string) {
+  throw new Response(null, {
+    headers: {
+      location,
+    },
+    status: 303,
+  });
+}
+
+export async function loader({ context }: { context: RequestContext }) {
+  if (!context.data?.user) createRedirect("/login");
+
+  const existingVerification = await context.env.VERIFICATIONS.get(
+    context.data.user.id
+  );
+
+  if (existingVerification) createRedirect("/me");
+
+  const { searchParams } = new URL(context.request.url);
+  const code = searchParams.get("code");
+  const state = searchParams.get("state");
+
+  if (!code || !state) createRedirect("/verify");
+}
+
+export default function () {
+  useLoaderData<typeof loader>();
+
   const [isLoading, setLoading] = useState(true);
   const [success, setSuccess] = useState(true);
 
   useEffect(() => {
     (async function () {
-      const session = localStorage.getItem("registry-session");
-
-      if (!session) return window.location.assign("/login");
-
-      const code = new URLSearchParams(window.location.search).get("code");
-      const state = new URLSearchParams(window.location.search).get("state");
+      const searchParams = new URLSearchParams(location.search);
+      const code = searchParams.get("code") as string;
+      const state = searchParams.get("state") as string;
       const storedState = sessionStorage.getItem("rbx-state");
       const verifier = sessionStorage.getItem("rbx-code-verifier");
 
-      if (!code || !verifier) return window.location.assign("/verify");
-
-      if (state !== storedState) {
+      if (state !== storedState || !verifier) {
         sessionStorage.clear();
-        return window.location.assign("/verify-error");
+        setSuccess(false);
+        setLoading(false);
+        return;
       }
 
       const rbxConnectRequest = await fetch("/client-api/linking/connect", {
         body: JSON.stringify({ code, verifier }),
         headers: {
-          authorization: session,
           "content-type": "application/json",
         },
         method: "POST",
@@ -36,9 +60,7 @@ export function Page() {
       sessionStorage.clear();
       setSuccess(rbxConnectRequest.ok);
       setLoading(false);
-      await new Promise((p) => setTimeout(p, 5000));
-
-      return location.assign(rbxConnectRequest.ok ? "/me" : "");
+      return location.assign(rbxConnectRequest.ok ? "/me" : "/");
     })();
   }, []);
 

@@ -7,7 +7,7 @@ import {
   UnorderedList,
 } from "@chakra-ui/react";
 
-export function Page() {
+export default function () {
   return (
     <Container maxW="container.lg" textAlign="left">
       <Heading size="2xl">Terms of Service</Heading>

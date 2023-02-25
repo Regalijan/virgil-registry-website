@@ -16,22 +16,59 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { type Dispatch, type SetStateAction, useState } from "react";
+import { useState } from "react";
+import { useLoaderData } from "@remix-run/react";
 
-export function Page(pageProps: {
-  privacy?: {
-    discord: number;
-    roblox: number;
-  };
-  roblox_avatar?: string;
-  roblox_username?: string;
-}) {
+export async function loader({ context }: { context: RequestContext }) {
+  if (!context.data?.user?.id)
+    throw new Response(null, {
+      headers: {
+        location: "/login",
+      },
+      status: 303,
+    });
+
+  const userData: null | {
+    avatar: string;
+    id: number;
+    username: string;
+    privacy: {
+      discord: number;
+      roblox: number;
+    };
+  } = await context.env.VERIFICATIONS.get(context.data.user.id, {
+    type: "json",
+  });
+
+  Object.defineProperty(userData, "avatar", {
+    value: "",
+  });
+
+  if (!userData)
+    throw new Response(null, {
+      headers: {
+        location: "/verify",
+      },
+      status: 303,
+    });
+
+  const thumbnailFetch = await fetch(
+    `https://thumbnails.roblox.com/v1/users/avatar?format=Png&size=180x180&userIds=${userData.id}`
+  );
+
+  if (!thumbnailFetch.ok) return userData;
+
+  const { data: thumbData }: { data: { imageUrl: string }[] } =
+    await thumbnailFetch.json();
+  userData.avatar = thumbData[0].imageUrl;
+
+  return userData;
+}
+
+export default function () {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const toast = useToast();
-  const [data, setData]: [
-    typeof pageProps,
-    Dispatch<SetStateAction<typeof pageProps>>
-  ] = useState(pageProps);
+  const [data, setData] = useState(useLoaderData<typeof loader>());
 
   async function refreshUsername() {
     const refreshReq = await fetch("/client-api/linking/refresh", {
@@ -195,10 +232,10 @@ export function Page(pageProps: {
         alt="Your Roblox avatar"
         boxSize="180px"
         display="initial"
-        src={data.roblox_avatar}
+        src={data.avatar}
       />
       <br />
-      <Heading>Hello {data.roblox_username}!</Heading>
+      <Heading>Hello {data.username}!</Heading>
       <br />
       <br />
       <br />

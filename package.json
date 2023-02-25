@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "remix build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -13,19 +12,20 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/plus-jakarta-sans": "^4.5.11",
+    "@remix-run/cloudflare": "^1.13.0",
+    "@remix-run/cloudflare-pages": "^1.13.0",
+    "@remix-run/react": "^1.13.0",
     "framer-motion": "^9.0.7",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.5",
-    "vite-plugin-ssr": "^0.4.86"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230221.0",
+    "@remix-run/dev": "^1.13.0",
+    "@types/node": "^18.14.1",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
-    "@vitejs/plugin-react": "^3.1.0",
     "prettier": "^2.8.4",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.4"
+    "typescript": "^4.9.5"
   }
 }

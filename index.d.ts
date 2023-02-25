@@ -1,8 +1,9 @@
-/// <reference types="vite/client" />
-
 import { type PageContextBuiltIn } from "vite-plugin-ssr";
 
 declare global {
+  // Fix TS vomiting with named style imports
+  module "*.css";
+
   interface Env {
     ASSETS: Fetcher;
     SESSIONS: KVNamespace;

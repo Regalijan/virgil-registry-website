@@ -14,7 +14,7 @@ import {
   UnorderedList,
 } from "@chakra-ui/react";
 
-export function Page() {
+export default function () {
   return (
     <Container maxW="container.lg" textAlign="left">
       <Heading>Developer Documentation</Heading>
@@ -40,7 +40,11 @@ export function Page() {
       <br />
       <Text>
         Returns a{" "}
-        <Link href="#user-object" textColor="red" textDecorationColor="red">
+        <Link
+          href="#user-object"
+          textColor="red"
+          textDecorationColor="red"
+        >
           User object
         </Link>
       </Text>
@@ -53,7 +57,11 @@ export function Page() {
       <br />
       <Text>
         Returns a{" "}
-        <Link href="#snowflake-list" textColor="red" textDecorationColor="red">
+        <Link
+          href="#snowflake-list"
+          textColor="red"
+          textDecorationColor="red"
+        >
           Snowflake List
         </Link>
         , or an empty array if the Roblox account is not connected.

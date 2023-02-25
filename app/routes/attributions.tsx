@@ -6,7 +6,7 @@ import {
   UnorderedList,
 } from "@chakra-ui/react";
 
-export function Page() {
+export default function () {
   return (
     <Container
       bg="blackAlpha.200"

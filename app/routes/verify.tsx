@@ -1,8 +1,8 @@
 import { Button, Container, Heading, Text } from "@chakra-ui/react";
-import { useEffect } from "react";
-import createChallenge from "../challenge";
+import createChallenge from "../../challenge";
+import { useLoaderData } from "@remix-run/react";
 
-async function initiateRBXSignIn() {
+async function initiateRBXSignIn(clientId: string) {
   const state = crypto.randomUUID();
   let verifier = "";
 
@@ -17,18 +17,38 @@ async function initiateRBXSignIn() {
   const { hostname, protocol } = new URL(window.location.href);
 
   window.location.assign(
-    `https://apis.roblox.com/oauth/v1/authorize?client_id=${
-      import.meta.env.VITE_ROBLOX_CLIENT_ID
-    }&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
+    `https://apis.roblox.com/oauth/v1/authorize?client_id=${clientId}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
       `${protocol}//${hostname}/link`
     )}&response_type=code&scope=openid%20profile&state=${state}`
   );
 }
 
-export function Page(pageProps: { verified: boolean }) {
-  useEffect(() => {
-    if (pageProps.verified) return location.assign("/me");
-  });
+export async function loader({
+  context,
+}: {
+  context: RequestContext;
+}): Promise<string> {
+  if (!context.data?.user?.id)
+    throw new Response(null, {
+      headers: {
+        location: "/login",
+      },
+      status: 303,
+    });
+
+  if (await context.env.VERIFICATIONS.get(context.data.user.id))
+    throw new Response(null, {
+      headers: {
+        location: "/me",
+      },
+      status: 303,
+    });
+
+  return context.env.RBX_ID;
+}
+
+export default function () {
+  const clientId = useLoaderData<typeof loader>();
 
   return (
     <Container pt="40px" maxW="28em">
@@ -42,7 +62,7 @@ export function Page(pageProps: { verified: boolean }) {
         alignSelf="center"
         mt="15px"
         w="70%"
-        onClick={async () => await initiateRBXSignIn()}
+        onClick={async () => await initiateRBXSignIn(clientId)}
       >
         Verify with Roblox
       </Button>

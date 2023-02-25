@@ -81,7 +81,7 @@ export default function (props: {
               <Center w="calc(100% - var(--chakra-space-8))">
                 <a href="/">
                   <img
-                    src="/logo44.png"
+                    src="/files/logo44.png"
                     alt="Virgil Registry Logo"
                     style={{ width: "36px", borderRadius: "50%" }}
                   />
@@ -95,7 +95,7 @@ export default function (props: {
             >
               <a href="/">
                 <img
-                  src="/logo44.png"
+                  src="/files/logo44.png"
                   alt="Virgil Registry Logo"
                   style={{ width: "36px", borderRadius: "50%" }}
                 />

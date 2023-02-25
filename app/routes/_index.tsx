@@ -9,9 +9,9 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useLayoutEffect, useState } from "react";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
 
-export function Page() {
+export default function () {
   const [loading, setLoading] = useState(true);
   const [desktop, setDesktop] = useState(false);
   const [pb, setpb] = useState("40px");

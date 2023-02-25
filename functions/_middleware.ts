@@ -1,36 +1,25 @@
-import { renderPage } from "vite-plugin-ssr";
 import generateHash from "./generate_hash";
 
-async function constructHTML(context: RequestContext) {
-  const { host, pathname, protocol } = new URL(context.request.url);
+async function assetCheck(context: RequestContext) {
+  const { pathname } = new URL(context.request.url);
 
   if (pathname.startsWith("/api/")) return await context.next();
 
   if (
-    pathname.startsWith("/assets/") ||
+    pathname.startsWith("/build/") ||
     ["/app.webmanifest", "/favicon.ico", "/robots.txt"].includes(pathname) ||
     pathname.startsWith("/files/")
   )
     return await context.env.ASSETS.fetch(context.request);
 
-  const { httpResponse, redirect_to_login, status } = await renderPage({
-    user: context.data.user,
-    redirect_to_login: false,
-    status: 200,
-    urlOriginal: context.request.url,
-    verifyKV: context.env.VERIFICATIONS,
-  });
+  return await context.next();
+}
 
-  if (redirect_to_login) return Response.redirect(`${protocol}//${host}/login`);
+async function setHeaders(context: RequestContext) {
+  context.request.headers.set("X-Frame-Options", "DENY");
+  context.request.headers.set("X-XSS-Protection", "1;mode=block");
 
-  return new Response(httpResponse?.getReadableWebStream(), {
-    headers: {
-      "content-type": httpResponse?.contentType ?? "text/html;charset=utf-8",
-    },
-    status: [200, 404, 500].includes(status)
-      ? httpResponse?.statusCode
-      : status,
-  });
+  return await context.next();
 }
 
 async function setUser(context: RequestContext) {
@@ -60,4 +49,4 @@ async function setUser(context: RequestContext) {
   return await context.next();
 }
 
-export const onRequest = [setUser, constructHTML];
+export const onRequest = [setUser, setHeaders, assetCheck];
