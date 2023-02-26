@@ -121,9 +121,10 @@ export async function onRequestPost(
 
   const randomValues = crypto.getRandomValues(new Uint32Array(1024));
   const sessionHash = await crypto.subtle.digest("SHA-512", randomValues);
-  const sessionToken = btoa(
-    String.fromCharCode(...new Uint8Array(sessionHash))
-  );
+  const sessionToken = btoa(String.fromCharCode(...new Uint8Array(sessionHash)))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=/g, "");
   const tokenHash = await crypto.subtle.digest(
     "SHA-512",
     new TextEncoder().encode(sessionToken)
