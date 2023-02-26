@@ -37,9 +37,7 @@ async function setUser(context: RequestContext) {
 
     if (name !== "vrs") continue;
 
-    const userData = await context.env.SESSIONS.get(
-      `auth_${await generateHash(value)}`
-    );
+    const userData = await context.env.SESSIONS.get(await generateHash(value));
 
     if (userData) context.data.user = JSON.parse(userData);
 
