@@ -151,7 +151,7 @@ export async function onRequestPost(
 
   return new Response(null, {
     headers: {
-      "set-cookie": `vsr=${sessionToken}; HttpOnly; Max-Age=3600; Path=/; SameSite=Lax; Secure`,
+      "set-cookie": `vrs=${sessionToken}; HttpOnly; Max-Age=3600; Path=/; SameSite=Lax; Secure`,
     },
     status: 204,
   });
