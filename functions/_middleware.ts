@@ -30,18 +30,27 @@ async function setUser(context: RequestContext) {
 
   if (!cookies) return await context.next();
 
-  const cookieList = cookies.split(/; /);
+  const cookieList: { [k: string]: string } = {};
 
-  for (const c of cookieList) {
+  for (const c of cookies.split(/; /)) {
     const [name, value] = c.split("=");
 
-    if (name !== "vrs") continue;
+    cookieList[name] = value;
+  }
 
-    const userData = await context.env.SESSIONS.get(await generateHash(value));
+  if (
+    cookieList["chakra-ui-color-mode"] ||
+    ["dark", "light"].includes(cookieList["chakra-ui-color-mode"])
+  ) {
+    context.data.theme = cookieList["chakra-ui-color-mode"];
+  }
+
+  if (cookieList.vrs) {
+    const userData = await context.env.SESSIONS.get(
+      await generateHash(cookieList.vrs)
+    );
 
     if (userData) context.data.user = JSON.parse(userData);
-
-    break;
   }
 
   return await context.next();
