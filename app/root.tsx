@@ -1,17 +1,17 @@
 import { Links, LiveReload, Outlet, Scripts, useCatch } from "@remix-run/react";
 import theme from "../theme";
-import { lazy, StrictMode } from "react";
+import { StrictMode } from "react";
 import fontStyle from "@fontsource/plus-jakarta-sans/index.css";
 import globalStyles from "../index.css";
 import appStyles from "../App.css";
 import { useLoaderData } from "@remix-run/react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, cookieStorageManagerSSR } from "@chakra-ui/react";
 import ErrorBoundary from "../components/ErrorBoundary";
 import Footer from "../components/Footer";
 import Navigation from "../components/Navigation";
-import { LinksFunction } from "@remix-run/cloudflare";
-const NotFound = lazy(() => import("../components/NotFound"));
-const ServerError = lazy(() => import("../components/ServerError"));
+import { type LinksFunction } from "@remix-run/cloudflare";
+import NotFound from "../components/NotFound";
+import ServerError from "../components/ServerError";
 
 export function CatchBoundary() {
   const { status } = useCatch();
@@ -43,19 +43,26 @@ export async function loader({
 }: {
   context: RequestContext;
 }): Promise<{ [k: string]: any }> {
-  if (!context.data?.user) return {};
+  let data: { [k: string]: string } = {};
 
-  return context.data.user as {
-    avatar?: string;
-    discriminator?: string;
-    id?: string;
-    username?: string;
-  };
+  if (context.data.user) data = { ...context.data.user };
+  if (context.data.theme) data.theme = context.data.theme;
+
+  return data;
 }
 
 export default function App() {
+  const loaderData = useLoaderData<typeof loader>();
+  const colorMode = loaderData.theme;
+
   return (
-    <html lang="en-US">
+    <html
+      lang="en-US"
+      {...(colorMode && {
+        "data-theme": colorMode,
+        style: { colorScheme: colorMode },
+      })}
+    >
       <head>
         <Links />
         <meta charSet="UTF-8" />
@@ -68,12 +75,15 @@ export default function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Virgil Registry</title>
       </head>
-      <body>
+      <body {...(colorMode && { className: `chakra-ui-${colorMode}` })}>
         <StrictMode>
-          <ChakraProvider theme={theme}>
+          <ChakraProvider
+            colorModeManager={cookieStorageManagerSSR(typeof document === "undefined" ? "" : document.cookie)}
+            theme={theme}
+          >
             <div className="App">
               <ErrorBoundary>
-                <Navigation {...useLoaderData<typeof loader>()} />
+                <Navigation {...loaderData} />
                 <Outlet />
                 <Footer />
                 <Scripts />
