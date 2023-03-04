@@ -1,46 +1,21 @@
 import { Container, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
-import { useLoaderData } from "@remix-run/react";
-
-function createRedirect(location: string) {
-  throw new Response(null, {
-    headers: {
-      location,
-    },
-    status: 303,
-  });
-}
-
-export async function loader({ context }: { context: RequestContext }) {
-  if (!context.data?.user) createRedirect("/login");
-
-  const existingVerification = await context.env.VERIFICATIONS.get(
-    context.data.user.id
-  );
-
-  if (existingVerification) createRedirect("/me");
-
-  const { searchParams } = new URL(context.request.url);
-  const code = searchParams.get("code");
-  const state = searchParams.get("state");
-
-  if (!code || !state) createRedirect("/verify");
-}
 
 export default function () {
-  useLoaderData<typeof loader>();
-
   const [isLoading, setLoading] = useState(true);
   const [success, setSuccess] = useState(true);
 
   useEffect(() => {
     (async function () {
       const searchParams = new URLSearchParams(location.search);
-      const code = searchParams.get("code") as string;
+      const code = searchParams.get("code");
       const state = searchParams.get("state") as string;
       const storedState = sessionStorage.getItem("rbx-state");
       const verifier = sessionStorage.getItem("rbx-code-verifier");
+
+      if (!code)
+        return location.assign("/verify");
 
       if (state !== storedState || !verifier) {
         sessionStorage.clear();
