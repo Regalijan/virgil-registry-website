@@ -16,7 +16,7 @@ export async function onRequestDelete(context: RequestContext) {
   for (const cookie of cookies) {
     const [name, value] = cookie.split("=");
 
-    if (name !== "vsr") continue;
+    if (name !== "vrs") continue;
 
     await SESSIONS.delete(await generateHash(value));
 
