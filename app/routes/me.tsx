@@ -57,9 +57,7 @@ export async function loader({ context }: { context: RequestContext }) {
   const { data: thumbData }: { data: { imageUrl: string }[] } =
     await thumbnailFetch.json();
 
-  Object.defineProperty(userData, "avatar", {
-    value: thumbData[0].imageUrl,
-  });
+  userData.avatar = thumbData[0].imageUrl;
 
   return userData;
 }
