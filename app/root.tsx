@@ -1,6 +1,6 @@
 import { Links, LiveReload, Outlet, Scripts, useCatch } from "@remix-run/react";
 import theme from "../theme";
-import { StrictMode } from "react";
+import { type ReactNode, StrictMode } from "react";
 import fontStyle from "@fontsource/plus-jakarta-sans/index.css";
 import globalStyles from "../index.css";
 import appStyles from "../App.css";
@@ -21,10 +21,10 @@ export function CatchBoundary() {
       return "";
 
     case 404:
-      return <NotFound />;
+      return getMarkup({ hide: true }, <NotFound />);
 
     default:
-      return <ServerError />;
+      return getMarkup({ hide: true }, <ServerError />);
   }
 }
 
@@ -51,16 +51,16 @@ export async function loader({
   return data;
 }
 
-export default function App() {
-  const loaderData = useLoaderData<typeof loader>();
-  const colorMode = loaderData.theme;
-
+function getMarkup(
+  loaderData: { [k: string]: any },
+  child: ReactNode
+): JSX.Element {
   return (
     <html
       lang="en-US"
-      {...(colorMode && {
-        "data-theme": colorMode,
-        style: { colorScheme: colorMode },
+      {...(loaderData.theme && {
+        "data-theme": loaderData.theme,
+        style: { colorScheme: loaderData.theme },
       })}
     >
       <head>
@@ -75,16 +75,18 @@ export default function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Virgil Registry</title>
       </head>
-      <body {...(colorMode && { className: `chakra-ui-${colorMode}` })}>
+      <body>
         <StrictMode>
           <ChakraProvider
-            colorModeManager={cookieStorageManagerSSR(typeof document === "undefined" ? "" : document.cookie)}
+            colorModeManager={cookieStorageManagerSSR(
+              typeof document === "undefined" ? "" : document.cookie
+            )}
             theme={theme}
           >
             <div className="App">
               <ErrorBoundary>
                 <Navigation {...loaderData} />
-                <Outlet />
+                {child}
                 <Footer />
                 <Scripts />
                 <LiveReload />
@@ -95,4 +97,10 @@ export default function App() {
       </body>
     </html>
   );
+}
+
+export default function App() {
+  const loaderData = useLoaderData<typeof loader>();
+
+  return getMarkup(loaderData, <Outlet />);
 }
