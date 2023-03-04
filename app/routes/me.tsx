@@ -48,10 +48,6 @@ export async function loader({ context }: { context: RequestContext }) {
       status: 303,
     });
 
-  Object.defineProperty(userData, "avatar", {
-    value: "",
-  });
-
   const thumbnailFetch = await fetch(
     `https://thumbnails.roblox.com/v1/users/avatar?format=Png&size=180x180&userIds=${userData.id}`
   );
@@ -60,7 +56,10 @@ export async function loader({ context }: { context: RequestContext }) {
 
   const { data: thumbData }: { data: { imageUrl: string }[] } =
     await thumbnailFetch.json();
-  userData.avatar = thumbData[0].imageUrl;
+
+  Object.defineProperty(userData, "avatar", {
+    value: thumbData[0].imageUrl,
+  });
 
   return userData;
 }
