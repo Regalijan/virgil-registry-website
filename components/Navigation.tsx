@@ -32,6 +32,7 @@ function getAvatarUrl(userData: { [k: string]: any }): string {
 export default function (props: {
   avatar?: string;
   discriminator?: string;
+  hide?: boolean;
   id?: string;
   username?: string;
 }) {
@@ -102,23 +103,17 @@ export default function (props: {
               </a>
               <Flex justify="space-between" flex="1">
                 <ButtonGroup variant="link" spacing="6">
-                  <Button onClick={() => window.location.assign("/premium")}>
+                  <Button as="a" href="/premium">
                     Premium
                   </Button>
-                  <Button
-                    onClick={() =>
-                      window.location.assign(
-                        "https://discord.com/invite/carcrushers"
-                      )
-                    }
-                  >
+                  <Button as="a" href="https://discord.com/invite/carcrushers">
                     Support
                   </Button>
-                  <Button onClick={() => window.location.assign("/docs")}>
+                  <Button as="a" href="/docs">
                     Docs
                   </Button>
                 </ButtonGroup>
-                <HStack spacing="3">
+                <HStack display={props.hide ? "none" : "flex"} spacing="3">
                   <Button
                     onClick={() =>
                       window.location.assign(props.id ? "/me" : "/login")
@@ -171,7 +166,7 @@ export default function (props: {
           <Link href={props.id ? "/me" : "/login"}>
             {props.id ? "Manage" : "Sign In"}
           </Link>
-          <HStack spacing="3">
+          <HStack display={props.hide ? "none" : "flex"} spacing="3">
             <Avatar
               display={props.id ? "" : "none"}
               src={getAvatarUrl(props)}
