@@ -114,11 +114,7 @@ export default function (props: {
                   </Button>
                 </ButtonGroup>
                 <HStack display={props.hide ? "none" : "flex"} spacing="3">
-                  <Button
-                    onClick={() =>
-                      window.location.assign(props.id ? "/me" : "/login")
-                    }
-                  >
+                  <Button as="a" href={props.id ? "/me" : "/login"}>
                     {props.id ? "Manage" : "Sign In"}
                   </Button>
                   <Avatar
