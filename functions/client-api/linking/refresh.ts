@@ -39,7 +39,7 @@ export async function onRequestPost(
     name: string;
   } = await usernameCheckReq.json();
 
-  const response_obj = { roblox_username: rbxUserData.name };
+  const response_obj: { [k: string]: string } = { username: rbxUserData.name };
 
   if (verifyData.username !== rbxUserData.name) {
     verifyData.username = rbxUserData.name;
@@ -68,10 +68,9 @@ export async function onRequestPost(
     );
 
     if (thumbFetch.ok)
-      Object.defineProperty(response_obj, "roblox_avatar", {
-        value: ((await thumbFetch.json()) as { data: { [k: string]: any }[] })
-          .data[0].imageUrl,
-      });
+      response_obj.avatar = (
+        (await thumbFetch.json()) as { data: { [k: string]: any }[] }
+      ).data[0].imageUrl;
   }
 
   return new Response(JSON.stringify(response_obj), {

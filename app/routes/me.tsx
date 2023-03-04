@@ -87,7 +87,7 @@ export default function () {
         isClosable: true,
       });
     } else {
-      const updatedData: { roblox_avatar?: string; roblox_username: string } =
+      const updatedData: { avatar?: string; username: string } =
         await refreshReq.json();
 
       toast({
