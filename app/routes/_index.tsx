@@ -8,7 +8,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 
 export default function () {
@@ -16,7 +16,7 @@ export default function () {
   const [desktop, setDesktop] = useState(false);
   const [pb, setpb] = useState("40px");
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     function readjust() {
       const isDesktop = screen.availWidth > 900;
       setpb(isDesktop ? "0" : "40px");
@@ -44,6 +44,7 @@ export default function () {
           <Button
             alignSelf="left"
             background="red.700"
+            color="white"
             size="lg"
             onClick={() => window.location.assign("/me")}
           >
@@ -55,7 +56,7 @@ export default function () {
       <br />
       <br />
       <br />
-      <Box w="100%" bg="red.700" pb="40px">
+      <Box w="100%" bg="red.700" color="white" pb="40px">
         <Container
           maxW="container.xl"
           pt="40px"
