@@ -43,7 +43,7 @@ export async function onRequestPost(
     !(await crypto.subtle.verify(
       "HMAC",
       key,
-      textEncode(sig.replace("v1=", "")),
+      Uint8Array.from(atob(sig.replace("v1=", "")), (c) => c.charCodeAt(0)),
       textEncode(`${timestamp.replace("t=", "")}.${body}`)
     ))
   )
