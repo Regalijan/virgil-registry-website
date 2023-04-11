@@ -8,24 +8,26 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.5.1",
+    "@chakra-ui/react": "^2.5.5",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/plus-jakarta-sans": "^4.5.11",
-    "@remix-run/cloudflare": "^1.13.0",
-    "@remix-run/cloudflare-pages": "^1.13.0",
-    "@remix-run/react": "^1.13.0",
-    "framer-motion": "^9.0.7",
+    "@remix-run/cloudflare": "^1.15.0",
+    "@remix-run/cloudflare-pages": "^1.15.0",
+    "@remix-run/react": "^1.15.0",
+    "framer-motion": "^10.11.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230221.0",
     "@remix-run/dev": "^1.13.0",
-    "@types/node": "^18.14.1",
-    "@types/react": "^18.0.28",
+    "@types/node": "^18.15.11",
+    "@types/react": "^18.0.34",
     "@types/react-dom": "^18.0.11",
-    "prettier": "^2.8.4",
-    "typescript": "^4.9.5"
+    "prettier": "^2.8.7",
+    "typescript": "^5.0.4"
+  },
+  "overrides": {
+    "@cloudflare/workers-types": "^4.20230221.0"
   }
 }
