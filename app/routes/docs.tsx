@@ -40,11 +40,7 @@ export default function () {
       <br />
       <Text>
         Returns a{" "}
-        <Link
-          href="#user-object"
-          textColor="red"
-          textDecorationColor="red"
-        >
+        <Link href="#user-object" textColor="red" textDecorationColor="red">
           User object
         </Link>
       </Text>
@@ -57,11 +53,7 @@ export default function () {
       <br />
       <Text>
         Returns a{" "}
-        <Link
-          href="#snowflake-list"
-          textColor="red"
-          textDecorationColor="red"
-        >
+        <Link href="#snowflake-list" textColor="red" textDecorationColor="red">
           Snowflake List
         </Link>
         , or an empty array if the Roblox account is not connected.

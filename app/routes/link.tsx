@@ -14,8 +14,7 @@ export default function () {
       const storedState = sessionStorage.getItem("rbx-state");
       const verifier = sessionStorage.getItem("rbx-code-verifier");
 
-      if (!code)
-        return location.assign("/verify");
+      if (!code) return location.assign("/verify");
 
       if (state !== storedState || !verifier) {
         sessionStorage.clear();

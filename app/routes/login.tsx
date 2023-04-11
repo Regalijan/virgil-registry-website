@@ -3,11 +3,7 @@ import { Container, Heading, Text } from "@chakra-ui/react";
 import Loading from "../../components/Loading";
 import { useLoaderData } from "@remix-run/react";
 
-export async function loader({
-  context,
-}: {
-  context: RequestContext;
-}) {
+export async function loader({ context }: { context: RequestContext }) {
   if (context.data?.user)
     throw new Response(null, {
       headers: {
