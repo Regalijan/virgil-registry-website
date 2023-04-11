@@ -1,20 +1,35 @@
-import { Links, LiveReload, Outlet, Scripts, useCatch } from "@remix-run/react";
+import {
+  isRouteErrorResponse,
+  Links,
+  LiveReload,
+  Outlet,
+  Scripts,
+  useRouteError,
+} from "@remix-run/react";
 import theme from "../theme";
-import { type ReactNode, StrictMode } from "react";
+import { type ReactNode, StrictMode, useContext, useEffect } from "react";
 import fontStyle from "@fontsource/plus-jakarta-sans/index.css";
 import globalStyles from "../index.css";
 import appStyles from "../App.css";
+import { ClientStyleContext, ServerStyleContext } from "./context";
 import { useLoaderData } from "@remix-run/react";
 import { ChakraProvider, cookieStorageManagerSSR } from "@chakra-ui/react";
-import ErrorBoundary from "../components/ErrorBoundary";
+import { withEmotionCache } from "@emotion/react";
+import ReactErrorBoundary from "../components/ErrorBoundary";
 import Footer from "../components/Footer";
 import Navigation from "../components/Navigation";
 import { type LinksFunction } from "@remix-run/cloudflare";
 import NotFound from "../components/NotFound";
 import ServerError from "../components/ServerError";
+import { type ErrorResponse } from "@remix-run/router";
 
-export function CatchBoundary() {
-  const { status } = useCatch();
+export function ErrorBoundary() {
+  const error = useRouteError() as ErrorResponse;
+
+  if (!isRouteErrorResponse(error))
+    return getMarkup({ hide: true }, <ServerError />);
+
+  const { status } = error;
 
   switch (status) {
     case 303:
@@ -55,48 +70,82 @@ function getMarkup(
   loaderData: { [k: string]: any },
   child: ReactNode
 ): JSX.Element {
-  return (
-    <html
-      lang="en-US"
-      {...(loaderData.theme && {
-        "data-theme": loaderData.theme,
-        style: { colorScheme: loaderData.theme },
-      })}
-    >
-      <head>
-        <Links />
-        <meta charSet="UTF-8" />
-        <meta name="description" content="Verification registry for Virgil" />
-        <meta
-          name="og:description"
-          content="Verification registry for Virgil"
-        />
-        <meta name="theme-color" content="#ff0000" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Virgil Registry</title>
-      </head>
-      <body>
-        <StrictMode>
-          <ChakraProvider
-            colorModeManager={cookieStorageManagerSSR(
-              typeof document === "undefined" ? "" : document.cookie
-            )}
-            theme={theme}
-          >
-            <div className="App">
-              <ErrorBoundary>
-                <Navigation {...loaderData} />
-                {child}
-                <Footer />
-                <Scripts />
-                <LiveReload />
-              </ErrorBoundary>
-            </div>
-          </ChakraProvider>
-        </StrictMode>
-      </body>
-    </html>
+  const Document = withEmotionCache(
+    ({ children }: { children: ReactNode }, emotionCache) => {
+      const serverStyleData = useContext(ServerStyleContext);
+      const clientStyleData = useContext(ClientStyleContext);
+
+      useEffect(() => {
+        emotionCache.sheet.container = document.head;
+        // re-inject tags
+        const tags = emotionCache.sheet.tags;
+        emotionCache.sheet.flush();
+        tags.forEach((tag) => {
+          (emotionCache.sheet as any)._insertTag(tag);
+        });
+        // reset cache to reapply global styles
+        clientStyleData?.reset();
+      }, []);
+
+      return (
+        <html
+          lang="en-US"
+          {...(loaderData.theme && {
+            "data-theme": loaderData.theme,
+            style: { colorScheme: loaderData.theme },
+          })}
+        >
+          <head>
+            <Links />
+            {serverStyleData?.map(({ key, ids, css }) => (
+              <style
+                key={key}
+                data-emotion={`${key} ${ids.join(" ")}`}
+                dangerouslySetInnerHTML={{ __html: css }}
+              />
+            ))}
+            <meta charSet="UTF-8" />
+            <meta
+              name="description"
+              content="Verification registry for Virgil"
+            />
+            <meta
+              name="og:description"
+              content="Verification registry for Virgil"
+            />
+            <meta name="theme-color" content="#ff0000" />
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0"
+            />
+            <title>Virgil Registry</title>
+          </head>
+          <body>
+            <StrictMode>
+              <ChakraProvider
+                colorModeManager={cookieStorageManagerSSR(
+                  typeof document === "undefined" ? "" : document.cookie
+                )}
+                theme={theme}
+              >
+                <div className="App">
+                  <ReactErrorBoundary>
+                    <Navigation {...loaderData} />
+                    {child}
+                    <Footer />
+                    <Scripts />
+                    <LiveReload />
+                  </ReactErrorBoundary>
+                </div>
+              </ChakraProvider>
+            </StrictMode>
+          </body>
+        </html>
+      );
+    }
   );
+
+  return <Document>{child}</Document>;
 }
 
 export default function App() {
