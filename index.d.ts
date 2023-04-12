@@ -1,7 +1,6 @@
-import { type PageContextBuiltIn } from "vite-plugin-ssr";
+import type { EmotionCache } from "@emotion/utils";
 
 declare global {
-  // Fix TS vomiting with named style imports
   module "*.css";
 
   interface Env {
@@ -12,12 +11,20 @@ declare global {
   }
 
   type RequestContext = EventContext<Env, string, { [k: string]: any }>;
-  interface PageContext extends PageContextBuiltIn {
-    pageProps: {
-      [k: string]: any;
-    };
-    status: number;
-    user?: { [k: string]: any };
-    verifyKV: KVNamespace;
+
+  interface EmotionCriticalToChunks {
+    html: string;
+    styles: { key: string; ids: string[]; css: string }[];
   }
+
+  interface EmotionServer {
+    constructStyleTagsFromChunks: (
+      criticalData: EmotionCriticalToChunks
+    ) => string;
+    extractCriticalToChunks: (html: string) => EmotionCriticalToChunks;
+  }
+
+  export function createEmotionServer(cache: EmotionCache): EmotionServer;
 }
+
+export {};
