@@ -24,7 +24,7 @@ export async function onRequestPost(
 
   if (
     parseInt(timestamp.replace("t=", "")) <
-    Math.floor((Date.now() - 600000) / 1000)
+    Math.floor(Date.now() / 1000) - 600
   )
     return makeResponse('{"error":"This request is stale"}', 406);
 
