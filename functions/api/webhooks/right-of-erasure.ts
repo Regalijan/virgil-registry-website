@@ -51,6 +51,9 @@ export async function onRequestPost(
 
   const data = JSON.parse(body);
 
+  if (data.EventType === "SampleNotification")
+    return new Response(null, { status: 204 });
+
   if (data.EventType !== "RightToErasureRequest")
     return makeResponse('{"error":"Invalid event type"}', 400);
 
