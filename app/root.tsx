@@ -22,6 +22,7 @@ import { type LinksFunction } from "@remix-run/cloudflare";
 import NotFound from "../components/NotFound";
 import ServerError from "../components/ServerError";
 import { type ErrorResponse } from "@remix-run/router";
+import MobileDetect from "mobile-detect";
 
 export function ErrorBoundary() {
   const error = useRouteError() as ErrorResponse;
@@ -58,10 +59,15 @@ export async function loader({
 }: {
   context: RequestContext;
 }): Promise<{ [k: string]: any }> {
-  let data: { [k: string]: string } = {};
+  let data: { [k: string]: any } = {};
 
   if (context.data.user) data = { ...context.data.user };
   if (context.data.theme) data.theme = context.data.theme;
+
+  const ua = context.request.headers.get("user-agent");
+
+  if (!ua) data.desktop = false;
+  else data.desktop = !Boolean(new MobileDetect(ua).mobile());
 
   return data;
 }
@@ -77,13 +83,13 @@ function getMarkup(
 
       useEffect(() => {
         emotionCache.sheet.container = document.head;
-        // re-inject tags
+
         const tags = emotionCache.sheet.tags;
         emotionCache.sheet.flush();
         tags.forEach((tag) => {
           (emotionCache.sheet as any)._insertTag(tag);
         });
-        // reset cache to reapply global styles
+
         clientStyleData?.reset();
       }, []);
 

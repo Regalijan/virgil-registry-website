@@ -13,7 +13,6 @@ import {
   HStack,
   Link,
   Text,
-  useBreakpointValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -31,12 +30,13 @@ function getAvatarUrl(userData: { [k: string]: any }): string {
 
 export default function (props: {
   avatar?: string;
+  desktop?: boolean;
   discriminator?: string;
   hide?: boolean;
   id?: string;
   username?: string;
 }) {
-  const isDesktop = useBreakpointValue({ base: false, lg: true });
+  const isDesktop = props.desktop ?? true;
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   async function revokeSession() {
