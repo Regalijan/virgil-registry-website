@@ -22,7 +22,10 @@ export async function onRequestPost(
 
   if (!sig) return makeResponse('{"error":"Missing signature"}', 400);
 
-  if (parseInt(timestamp.replace("t=", "")) < Date.now() - 600000)
+  if (
+    parseInt(timestamp.replace("t=", "")) <
+    Math.floor((Date.now() - 600000) / 1000)
+  )
     return makeResponse('{"error":"This request is stale"}', 406);
 
   const body = await context.request.text();
