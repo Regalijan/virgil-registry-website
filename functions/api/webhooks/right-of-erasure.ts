@@ -29,7 +29,7 @@ export async function onRequestPost(
     return makeResponse('{"error":"This request is stale"}', 406);
 
   const body = await context.request.text();
-  const textEncode = new TextEncoder().encode;
+  const textEncode = ((text: string) => new TextEncoder().encode(text));
 
   const key = await crypto.subtle.importKey(
     "raw",
