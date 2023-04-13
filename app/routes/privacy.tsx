@@ -13,9 +13,9 @@ export default function () {
       <Heading size="2xl">Privacy Policy</Heading>
       <br />
       <Text>
-        Our policy is relatively simple, we only collect what is needed, and if
-        it is no longer needed, we dispose of it. For details, continue reading
-        below.
+        Our policy is relatively simple, we only directly collect what is
+        needed, and if it is no longer needed, we dispose of it. For details,
+        continue reading below.
       </Text>
       <br />
       <br />
@@ -152,9 +152,8 @@ export default function () {
       <br />
       <Heading>Cookies</Heading>
       <Text>
-        All "cookies" (we use local/session storage only) set by this site are
-        necessary for operation. We do not set marketing or targeting cookies of
-        any sort.
+        All cookies set by this site are necessary for operation. We do not set
+        marketing or targeting cookies of any sort.
       </Text>
       <br />
       <Heading>Security</Heading>
