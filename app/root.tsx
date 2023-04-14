@@ -64,6 +64,13 @@ export async function loader({
   if (context.data.user) data = { ...context.data.user };
   if (context.data.theme) data.theme = context.data.theme;
 
+  const isMobileCH = context.request.headers.get("sec-ch-ua-mobile");
+
+  if (isMobileCH) {
+    data.desktop = isMobileCH === "?0";
+    return data;
+  }
+
   const ua = context.request.headers.get("user-agent");
 
   if (!ua) data.desktop = false;
