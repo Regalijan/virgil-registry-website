@@ -4,9 +4,11 @@ declare global {
   module "*.css";
 
   interface Env {
+    API_KEYS: KVNamespace;
     ASSETS: Fetcher;
+    BANS: KVNamespace;
     SESSIONS: KVNamespace;
-    verifyKV: KVNamespace;
+    VERIFICATIONS: KVNamespace;
     [k: string]: string;
   }
 
