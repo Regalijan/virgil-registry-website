@@ -28,7 +28,12 @@ export async function loader({
   context,
 }: {
   context: RequestContext;
-}): Promise<{ banned: boolean; clientId: string; email?: string }> {
+}): Promise<{
+  banned: boolean;
+  clientId: string;
+  email?: string;
+  reason?: string;
+}> {
   if (!context.data?.user?.id)
     throw new Response(null, {
       headers: {
@@ -55,6 +60,7 @@ export async function loader({
     banned,
     clientId: context.env.RBX_ID,
     email: banned ? context.env.CONTACT_EMAIL : undefined,
+    reason: banData ? banData.reason : undefined,
   };
 }
 
@@ -62,7 +68,7 @@ export default function () {
   const loaderData = useLoaderData<typeof loader>();
 
   return loaderData.banned ? (
-    <Banned email={loaderData.email} />
+    <Banned email={loaderData.email} reason={loaderData.reason} />
   ) : (
     <Container pt="40px" maxW="28em">
       <Heading>Hello</Heading>
