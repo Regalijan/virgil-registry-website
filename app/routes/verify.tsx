@@ -1,4 +1,5 @@
 import { Button, Container, Heading, Text } from "@chakra-ui/react";
+import Banned from "../../components/Banned";
 import createChallenge from "../../challenge";
 import { useLoaderData } from "@remix-run/react";
 
@@ -27,7 +28,7 @@ export async function loader({
   context,
 }: {
   context: RequestContext;
-}): Promise<string> {
+}): Promise<{ banned: boolean; clientId: string; email?: string }> {
   if (!context.data?.user?.id)
     throw new Response(null, {
       headers: {
@@ -44,13 +45,25 @@ export async function loader({
       status: 303,
     });
 
-  return context.env.RBX_ID;
+  const banData: { [k: string]: any } | null = await context.env.BANS.get(
+    context.data.user.id,
+    { type: "json" }
+  );
+  const banned = Boolean(await context.env.BANS.get(context.data.user.id));
+
+  return {
+    banned,
+    clientId: context.env.RBX_ID,
+    email: banned ? context.env.CONTACT_EMAIL : undefined,
+  };
 }
 
 export default function () {
-  const clientId = useLoaderData<typeof loader>();
+  const loaderData = useLoaderData<typeof loader>();
 
-  return (
+  return loaderData.banned ? (
+    <Banned email={loaderData.email} />
+  ) : (
     <Container pt="40px" maxW="28em">
       <Heading>Hello</Heading>
       <br />
@@ -62,7 +75,7 @@ export default function () {
         alignSelf="center"
         mt="15px"
         w="70%"
-        onClick={async () => await initiateRBXSignIn(clientId)}
+        onClick={async () => await initiateRBXSignIn(loaderData.clientId)}
       >
         Verify with Roblox
       </Button>
