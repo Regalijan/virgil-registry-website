@@ -75,12 +75,12 @@ export default function () {
         align="center"
       >
         <Text fontSize="sm" color="subtle">
-          &copy; {new Date().getFullYear()} Wolftallemo
+          &copy; {new Date().getFullYear()} Regalijan
         </Text>
         <ButtonGroup variant="ghost">
           <IconButton
             as="a"
-            href="https://github.com/Wolftallemo?tab=repositories"
+            href="https://github.com/Regalijan?tab=repositories"
             aria-label="GitHub"
             icon={
               <svg
