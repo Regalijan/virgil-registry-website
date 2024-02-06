@@ -8,30 +8,19 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import Loading from "../../components/Loading";
 
 export default function () {
-  const [loading, setLoading] = useState(true);
-  const [desktop, setDesktop] = useState(false);
-  const [pb, setpb] = useState("40px");
-
-  useEffect(() => {
-    function readjust() {
-      const isDesktop = screen.availWidth > 900;
-      setpb(isDesktop ? "0" : "40px");
-      setDesktop(isDesktop);
-    }
-
-    readjust();
-    window.addEventListener("resize", readjust);
-    setLoading(false);
-  });
-
-  return loading ? (
-    <Loading />
-  ) : (
+  return (
     <>
+      <style>
+        {`
+          .lg-display-pb {
+            @media (min-width: 900px) {
+              padding-bottom: 40px;
+            }
+          }
+        `}
+      </style>
       <Box alignContent="left">
         <Container maxW="container.xl" textAlign="left" paddingTop="8vh">
           <Heading>Roblox and Discord are better together</Heading>
@@ -70,16 +59,11 @@ export default function () {
         <Container maxW="container.xl">
           <Flex>
             <VStack>
-              <HStack
-                display="flex"
-                flexDir={desktop ? "initial" : "column"}
-                w="100%"
-                paddingBottom="120px"
-              >
+              <HStack display="flex" w="100%" paddingBottom="120px">
                 <Container
+                  className="lg-display-pb"
                   display="flex"
                   justifyContent="center"
-                  paddingBottom={pb}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -95,9 +79,9 @@ export default function () {
                   </svg>
                 </Container>
                 <Container
+                  className="lg-display-pb"
                   maxW="container.xl"
                   textAlign="left"
-                  paddingBottom={pb}
                 >
                   <Heading pb="20px">Better Privacy</Heading>
                   <Text fontSize="xl">
@@ -107,12 +91,8 @@ export default function () {
                   </Text>
                 </Container>
               </HStack>
-              <HStack
-                w="100%"
-                paddingBottom="120px"
-                flexDir={desktop ? "initial" : "column-reverse"}
-              >
-                <Container textAlign="left" paddingBottom={pb}>
+              <HStack w="100%" paddingBottom="120px">
+                <Container className="lg-display-pb" textAlign="left">
                   <Heading pb="20px">Integration</Heading>
                   <Text fontSize="xl">
                     Utilize Virgil's moderation features with Roblox
@@ -120,10 +100,10 @@ export default function () {
                   </Text>
                 </Container>
                 <Container
+                  className="lg-display-pb"
                   display="flex"
                   justifyContent="center"
                   maxW="container.xl"
-                  paddingBottom={pb}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -137,11 +117,11 @@ export default function () {
                   </svg>
                 </Container>
               </HStack>
-              <HStack w="100%" flexDir={desktop ? "initial" : "column"}>
+              <HStack w="100%">
                 <Container
+                  className="lg-display-pb"
                   display="flex"
                   justifyContent="center"
-                  paddingBottom={pb}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -154,9 +134,9 @@ export default function () {
                   </svg>
                 </Container>
                 <Container
+                  className="lg-display-pb"
                   maxW="container.xl"
                   textAlign="left"
-                  paddingBottom={pb}
                 >
                   <Heading pb="20px">Open Source</Heading>
                   <Text fontSize="xl">
