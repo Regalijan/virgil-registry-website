@@ -20,10 +20,10 @@ import {
 function getAvatarUrl(userData: { [k: string]: any }): string {
   const BASE = "https://cdn.discordapp.com/";
 
-  if (!userData.id) return "";
+  if (!userData.id || typeof window["BigInt"] === "undefined") return "";
 
   if (!userData.avatar)
-    return BASE + `embed/avatars/${parseInt(userData.discriminator) % 5}.png`;
+    return BASE + `embed/avatars/${(BigInt(userData.id) >> 22n) % 6n}.png`;
 
   return BASE + `avatars/${userData.id}/${userData.avatar}`;
 }
