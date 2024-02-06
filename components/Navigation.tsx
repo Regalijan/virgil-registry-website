@@ -30,13 +30,12 @@ function getAvatarUrl(userData: { [k: string]: any }): string {
 
 export default function (props: {
   avatar?: string;
-  desktop?: boolean;
+  deskbtop?: boolean;
   discriminator?: string;
   hide?: boolean;
   id?: string;
   username?: string;
 }) {
-  const isDesktop = props.desktop ?? true;
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   async function revokeSession() {
@@ -62,10 +61,7 @@ export default function (props: {
       <Box as="section" pb={{ base: "12" }}>
         <Box as="nav" justifyContent="center">
           <Container maxW="container.lg" py={{ base: "6" }}>
-            <Container
-              alignItems="center"
-              display={isDesktop ? "none" : "flex"}
-            >
+            <Container alignItems="center" className="small-nav">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -89,11 +85,7 @@ export default function (props: {
                 </a>
               </Center>
             </Container>
-            <HStack
-              display={isDesktop ? "flex" : "none"}
-              justifyContent="left"
-              spacing="6"
-            >
+            <HStack className="full-nav" justifyContent="left" spacing="6">
               <a href="/">
                 <img
                   src="/files/logo44.png"

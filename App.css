@@ -1,3 +1,15 @@
 .App {
   text-align: center;
 }
+
+.full-nav {
+  @media (max-width: 799px) {
+    display: none !important;
+  }
+}
+
+.small-nav {
+  @media (min-width: 800px) {
+    display: none;
+  }
+}
