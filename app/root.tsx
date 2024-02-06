@@ -22,7 +22,6 @@ import { type LinksFunction } from "@remix-run/cloudflare";
 import NotFound from "../components/NotFound";
 import ServerError from "../components/ServerError";
 import { type ErrorResponse } from "@remix-run/router";
-import MobileDetect from "mobile-detect";
 
 export function ErrorBoundary() {
   const error = useRouteError() as ErrorResponse;
@@ -63,18 +62,6 @@ export async function loader({
 
   if (context.data.user) data = { ...context.data.user };
   if (context.data.theme) data.theme = context.data.theme;
-
-  const isMobileCH = context.request.headers.get("sec-ch-ua-mobile");
-
-  if (isMobileCH) {
-    data.desktop = isMobileCH === "?0";
-    return data;
-  }
-
-  const ua = context.request.headers.get("user-agent");
-
-  if (!ua) data.desktop = false;
-  else data.desktop = !Boolean(new MobileDetect(ua).mobile());
 
   return data;
 }

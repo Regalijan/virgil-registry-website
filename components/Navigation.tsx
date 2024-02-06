@@ -30,7 +30,6 @@ function getAvatarUrl(userData: { [k: string]: any }): string {
 
 export default function (props: {
   avatar?: string;
-  deskbtop?: boolean;
   discriminator?: string;
   hide?: boolean;
   id?: string;
