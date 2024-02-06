@@ -14,6 +14,18 @@ export default function () {
     <>
       <style>
         {`
+          .lg-display-flex {
+            @media (max-width: 899px) {
+              flex-direction: column;
+            }
+          }
+
+          .lg-display-flex-reverse {
+            @media (max-width: 899px) {
+              flex-direction: column-reverse;
+            }
+          }
+
           .lg-display-pb {
             @media (min-width: 900px) {
               padding-bottom: 40px;
@@ -61,7 +73,7 @@ export default function () {
             <VStack>
               <HStack display="flex" w="100%" paddingBottom="120px">
                 <Container
-                  className="lg-display-pb"
+                  className="lg-display-flex lg-display-pb"
                   display="flex"
                   justifyContent="center"
                 >
@@ -79,7 +91,7 @@ export default function () {
                   </svg>
                 </Container>
                 <Container
-                  className="lg-display-pb"
+                  className="lg-display-flex-reverse lg-display-pb"
                   maxW="container.xl"
                   textAlign="left"
                 >
@@ -92,7 +104,10 @@ export default function () {
                 </Container>
               </HStack>
               <HStack w="100%" paddingBottom="120px">
-                <Container className="lg-display-pb" textAlign="left">
+                <Container
+                  className="lg-display-flex lg-display-pb"
+                  textAlign="left"
+                >
                   <Heading pb="20px">Integration</Heading>
                   <Text fontSize="xl">
                     Utilize Virgil's moderation features with Roblox
