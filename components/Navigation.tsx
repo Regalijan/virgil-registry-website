@@ -42,7 +42,7 @@ export default function (props: {
       method: "DELETE",
     });
 
-    if (revokeReq.status.toString().startsWith("5")) {
+    if (!revokeReq.ok) {
       useToast()({
         title: "Oops",
         description: "We were unable to log you out",
