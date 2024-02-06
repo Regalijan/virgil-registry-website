@@ -1,0 +1,5 @@
+.cache
+functions/[[path]].js
+functions/metafile.js.json
+functions/metafile.server.json
+public/build
