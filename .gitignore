@@ -129,3 +129,6 @@ functions/\[\[path\]\].js
 ## IDEs
 .idea
 .vscode
+
+# Wrangler
+.wrangler
