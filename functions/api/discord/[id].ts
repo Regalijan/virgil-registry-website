@@ -1,11 +1,11 @@
 import makeResponse from "../makeResponse";
 
 export async function onRequestGet(
-  context: EventContext<Env, string, { [k: string]: any }>
+  context: EventContext<Env, string, { [k: string]: any }>,
 ) {
   const locatedUser: User | null = await context.env.VERIFICATIONS.get(
     context.params.id as string,
-    "json"
+    "json",
   );
   const { data } = context;
 

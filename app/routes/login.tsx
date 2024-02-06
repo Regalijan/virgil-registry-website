@@ -54,7 +54,7 @@ export default function () {
         sessionStorage.setItem("__test__", "__test__");
       } catch {
         setError(
-          "Storage is disabled on this browser, you may need to enable cookies on your browser. On iOS you may need to disable private browsing."
+          "Storage is disabled on this browser, you may need to enable cookies on your browser. On iOS you may need to disable private browsing.",
         );
         hasFailed(true);
         return;
@@ -62,7 +62,7 @@ export default function () {
 
       if (!sessionStorage.getItem("__test__")) {
         setError(
-          'Storage is unavailable on this browser. If you are using a safari custom window, please tap the safari icon at the bottom. If you are using a chrome or other custom tab on android, please open the tab menu and tap on "Open in Browser".'
+          'Storage is unavailable on this browser. If you are using a safari custom window, please tap the safari icon at the bottom. If you are using a chrome or other custom tab on android, please open the tab menu and tap on "Open in Browser".',
         );
         hasFailed(true);
         return;
@@ -72,7 +72,7 @@ export default function () {
 
       if (typeof crypto["randomUUID"] !== "function") {
         setError(
-          "Your browser is too old, you must update it to use this site."
+          "Your browser is too old, you must update it to use this site.",
         );
         hasFailed(true);
         return;
@@ -80,8 +80,8 @@ export default function () {
 
       window.location.assign(
         `https://discord.com/oauth2/authorize?client_id=${discordClientId}&redirect_uri=${encodeURIComponent(
-          location.href
-        )}&response_type=code&scope=identify%20role_connections.write`
+          location.href,
+        )}&response_type=code&scope=identify%20role_connections.write`,
       );
     })();
   }, []);

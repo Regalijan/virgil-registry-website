@@ -49,7 +49,7 @@ export async function loader({ context }: { context: RequestContext }) {
     });
 
   const thumbnailFetch = await fetch(
-    `https://thumbnails.roblox.com/v1/users/avatar?format=Png&size=180x180&userIds=${userData.id}`
+    `https://thumbnails.roblox.com/v1/users/avatar?format=Png&size=180x180&userIds=${userData.id}`,
   );
 
   if (!thumbnailFetch.ok) return userData;
@@ -131,10 +131,10 @@ export default function () {
 
   async function updatePrivacy() {
     const discordElem = document.getElementById(
-      "discord-privacy"
+      "discord-privacy",
     ) as unknown as HTMLSelectElement;
     const rbxElem = document.getElementById(
-      "rbx-privacy"
+      "rbx-privacy",
     ) as unknown as HTMLSelectElement;
     const discord = discordElem.selectedIndex;
     const roblox = rbxElem.selectedIndex;

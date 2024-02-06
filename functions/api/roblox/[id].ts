@@ -1,18 +1,18 @@
 import makeResponse from "../makeResponse";
 
 export async function onRequestGet(
-  context: EventContext<Env, string, { [k: string]: any }>
+  context: EventContext<Env, string, { [k: string]: any }>,
 ) {
   const locatedUsers: string[] | null = await context.env.VERIFICATIONS.get(
     context.params.id as string,
-    "json"
+    "json",
   );
   const { data } = context;
 
   if (!locatedUsers)
     return makeResponse(
       { error: "No Discord accounts linked to this Roblox account" },
-      404
+      404,
     );
 
   if (data.is_internal) return makeResponse(locatedUsers, 200);
@@ -22,7 +22,7 @@ export async function onRequestGet(
   for (const userId of locatedUsers) {
     const user: User | null = await context.env.VERIFICATIONS.get(
       userId,
-      "json"
+      "json",
     );
 
     if (!user) continue;
@@ -40,7 +40,7 @@ export async function onRequestGet(
           ? "You cannot access the discord accounts of this user"
           : "Resource requires API key",
       },
-      data.apiKeyInfo ? 403 : 401
+      data.apiKeyInfo ? 403 : 401,
     );
 
   return makeResponse(usersToReturn, 200);

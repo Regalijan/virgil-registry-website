@@ -4,10 +4,10 @@ export default async function (verifier: string): Promise<string> {
       ...new Uint8Array(
         await crypto.subtle.digest(
           "SHA-256",
-          new TextEncoder().encode(verifier)
-        )
-      )
-    )
+          new TextEncoder().encode(verifier),
+        ),
+      ),
+    ),
   )
     .replace(/\+/g, "-")
     .replace(/\//g, "_")

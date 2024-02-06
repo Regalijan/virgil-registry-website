@@ -8,7 +8,7 @@ function makeResponse(body: string, status: number): Response {
 }
 
 export async function onRequestPost(
-  context: EventContext<Env, string, { [k: string]: any }>
+  context: EventContext<Env, string, { [k: string]: any }>,
 ) {
   if (!context.env.ROBLOX_WEBHOOK_SECRET)
     return makeResponse('{"error":"This endpoint is currently disabled"}', 503);
@@ -29,7 +29,7 @@ export async function onRequestPost(
     return makeResponse('{"error":"This request is stale"}', 406);
 
   const body = await context.request.text();
-  const textEncode = ((text: string) => new TextEncoder().encode(text));
+  const textEncode = (text: string) => new TextEncoder().encode(text);
 
   const key = await crypto.subtle.importKey(
     "raw",
@@ -39,7 +39,7 @@ export async function onRequestPost(
       name: "HMAC",
     },
     false,
-    ["verify"]
+    ["verify"],
   );
 
   if (
@@ -47,7 +47,7 @@ export async function onRequestPost(
       "HMAC",
       key,
       Uint8Array.from(atob(sig.replace("v1=", "")), (c) => c.charCodeAt(0)),
-      textEncode(`${timestamp.replace("t=", "")}.${body}`)
+      textEncode(`${timestamp.replace("t=", "")}.${body}`),
     ))
   )
     return makeResponse('{"error":"Invalid signature"}', 403);

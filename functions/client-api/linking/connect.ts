@@ -1,5 +1,5 @@
 export async function onRequestPost(
-  context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>
+  context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>,
 ) {
   const { data, env } = context;
 
@@ -11,7 +11,7 @@ export async function onRequestPost(
           "content-type": "application/json",
         },
         status: 400,
-      }
+      },
     );
 
   const { hostname, protocol } = new URL(context.request.url);
@@ -51,7 +51,7 @@ export async function onRequestPost(
           "content-type": "application/json",
         },
         status: 500,
-      }
+      },
     );
 
   const tokenPart = id_token.split(".")[1];
@@ -60,7 +60,7 @@ export async function onRequestPost(
 
   try {
     decodedToken = JSON.parse(
-      atob(tokenPart.replaceAll("-", "+").replaceAll("_", "/"))
+      atob(tokenPart.replaceAll("-", "+").replaceAll("_", "/")),
     );
   } catch {
     return new Response(
@@ -70,7 +70,7 @@ export async function onRequestPost(
           "content-type": "application/json",
         },
         status: 500,
-      }
+      },
     );
   }
 
@@ -89,7 +89,7 @@ export async function onRequestPost(
         JSON.stringify({
           reason: `Attempted to link banned Discord account ${data.user.id}`,
           time,
-        })
+        }),
       );
     } else if (!discordBan && robloxBan) {
       await banKV.put(
@@ -97,7 +97,7 @@ export async function onRequestPost(
         JSON.stringify({
           reason: `Attempted to link banned Roblox account ${decodedToken.sub}`,
           time,
-        })
+        }),
       );
     }
 
@@ -118,11 +118,11 @@ export async function onRequestPost(
         discord: 0,
         roblox: 1,
       },
-    })
+    }),
   );
 
   const reverseData: string[] = JSON.parse(
-    (await verifyKV.get(decodedToken.sub)) ?? "[]"
+    (await verifyKV.get(decodedToken.sub)) ?? "[]",
   );
 
   reverseData.push(data.user.id);
@@ -152,7 +152,7 @@ export async function onRequestPost(
         "content-type": "application/json",
       },
       method: "PUT",
-    }
+    },
   );
 
   return new Response(null, {

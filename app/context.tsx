@@ -15,5 +15,5 @@ export interface ClientStyleContextData {
 }
 
 export const ClientStyleContext = createContext<ClientStyleContextData | null>(
-  null
+  null,
 );

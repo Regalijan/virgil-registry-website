@@ -38,7 +38,7 @@ export async function onRequestPost(
     { [k: string]: string },
     string,
     { [k: number | string]: any }
-  >
+  >,
 ) {
   const { env, request } = context;
   const SESSIONS = env.SESSIONS as unknown as KVNamespace;
@@ -66,7 +66,7 @@ export async function onRequestPost(
           "content-type": "application/json",
         },
         status: 400,
-      }
+      },
     );
 
   const { hostname, protocol } = new URL(request.url);
@@ -91,7 +91,7 @@ export async function onRequestPost(
           "content-type": "application/json",
         },
         status: 500,
-      }
+      },
     );
 
   const {
@@ -127,7 +127,7 @@ export async function onRequestPost(
     .replace(/=/g, "");
   const tokenHash = await crypto.subtle.digest(
     "SHA-512",
-    new TextEncoder().encode(sessionToken)
+    new TextEncoder().encode(sessionToken),
   );
 
   try {
@@ -139,7 +139,7 @@ export async function onRequestPost(
         ...((await currentUserRequest.json()) as { [k: string]: any }),
         access_token,
       }),
-      { expirationTtl: 3600 }
+      { expirationTtl: 3600 },
     );
   } catch {
     return new Response('{"error":"Failed to create session"}', {

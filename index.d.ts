@@ -21,7 +21,7 @@ declare global {
 
   interface EmotionServer {
     constructStyleTagsFromChunks: (
-      criticalData: EmotionCriticalToChunks
+      criticalData: EmotionCriticalToChunks,
     ) => string;
     extractCriticalToChunks: (html: string) => EmotionCriticalToChunks;
   }

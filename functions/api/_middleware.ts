@@ -1,5 +1,5 @@
 export async function onRequest(
-  context: EventContext<Env, string, { [k: string]: any }>
+  context: EventContext<Env, string, { [k: string]: any }>,
 ) {
   const authToken = context.request.headers.get("authorization");
 
@@ -22,16 +22,16 @@ export async function onRequest(
     new Uint8Array(
       await crypto.subtle.digest(
         "SHA-512",
-        new TextEncoder().encode(authToken.split(" ")[1])
-      )
-    )
+        new TextEncoder().encode(authToken.split(" ")[1]),
+      ),
+    ),
   )
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
   context.data.apiKeyInfo = (await context.env.API_KEYS.get(
     apiKeyHash,
-    "json"
+    "json",
   )) as APIKey;
 
   if (!context.data.apiKeyInfo)

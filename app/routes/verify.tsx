@@ -19,8 +19,8 @@ async function initiateRBXSignIn(clientId: string) {
 
   window.location.assign(
     `https://apis.roblox.com/oauth/v1/authorize?client_id=${clientId}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
-      `${protocol}//${hostname}/link`
-    )}&response_type=code&scope=openid%20profile&state=${state}`
+      `${protocol}//${hostname}/link`,
+    )}&response_type=code&scope=openid%20profile&state=${state}`,
   );
 }
 
@@ -52,7 +52,7 @@ export async function loader({
 
   const banData: { [k: string]: any } | null = await context.env.BANS.get(
     context.data.user.id,
-    { type: "json" }
+    { type: "json" },
   );
   const banned = Boolean(await context.env.BANS.get(context.data.user.id));
 

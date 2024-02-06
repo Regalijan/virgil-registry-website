@@ -3,7 +3,7 @@ export async function onRequestDelete(
     { [k: string]: string } & { VERIFICATIONS: KVNamespace },
     string,
     { [k: string]: any }
-  >
+  >,
 ) {
   const verifyKV = context.env.VERIFICATIONS;
   const verifyData = await verifyKV.get(context.data.user.id);
@@ -27,15 +27,15 @@ export async function onRequestDelete(
         "content-type": "application/json",
       },
       method: "PUT",
-    }
+    },
   );
 
   const data = JSON.parse(verifyData);
   const reverseData: string[] = JSON.parse(
-    (await verifyKV.get(data.id.toString())) ?? "[]"
+    (await verifyKV.get(data.id.toString())) ?? "[]",
   );
   const reverseIndex = reverseData.findIndex(
-    (id) => id === context.data.user.id
+    (id) => id === context.data.user.id,
   );
 
   if (reverseIndex === -1)

@@ -3,7 +3,7 @@ export async function onRequestPost(
     { [k: string]: string } & { VERIFICATIONS: KVNamespace },
     string,
     { [k: string]: any }
-  >
+  >,
 ) {
   const verifyKV = context.env.VERIFICATIONS;
   const verifyKey = await verifyKV.get(context.data.user.id);
@@ -18,7 +18,7 @@ export async function onRequestPost(
 
   const verifyData = JSON.parse(verifyKey);
   const usernameCheckReq = await fetch(
-    `https://users.roblox.com/v1/users/${verifyData.id}`
+    `https://users.roblox.com/v1/users/${verifyData.id}`,
   );
 
   if (!usernameCheckReq.ok)
@@ -31,7 +31,7 @@ export async function onRequestPost(
           "content-type": "application/json",
         },
         status: 500,
-      }
+      },
     );
 
   const rbxUserData: {
@@ -60,11 +60,11 @@ export async function onRequestPost(
           "content-type": "application/json",
         },
         method: "PUT",
-      }
+      },
     );
 
     const thumbFetch = await fetch(
-      `https://thumbnails.roblox.com/v1/users/avatar?userIds=${rbxUserData.id}&size=180x180&format=Png`
+      `https://thumbnails.roblox.com/v1/users/avatar?userIds=${rbxUserData.id}&size=180x180&format=Png`,
     );
 
     if (thumbFetch.ok)

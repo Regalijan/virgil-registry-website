@@ -25,5 +25,5 @@ hydrateRoot(
     <ClientCacheProvider>
       <RemixBrowser />
     </ClientCacheProvider>
-  </StrictMode>
+  </StrictMode>,
 );

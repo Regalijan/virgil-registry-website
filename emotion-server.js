@@ -55,7 +55,7 @@ function createConstructStyleTagsFromChunks(cache, nonceString) {
         item.key,
         item.ids.join(" "),
         item.css,
-        nonceString
+        nonceString,
       );
     });
 
@@ -73,7 +73,7 @@ export function createEmotionServer(cache) {
     extractCriticalToChunks: createExtractCriticalToChunks(cache),
     constructStyleTagsFromChunks: createConstructStyleTagsFromChunks(
       cache,
-      nonceString
+      nonceString,
     ),
   };
 }

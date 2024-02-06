@@ -3,7 +3,7 @@ export async function onRequestPost(
     { [k: string]: string } & { VERIFICATIONS: KVNamespace },
     string,
     { [k: string]: any }
-  >
+  >,
 ) {
   const { discord, roblox } = context.data.body;
 
@@ -15,7 +15,7 @@ export async function onRequestPost(
           "content-type": "application/json",
         },
         status: 400,
-      }
+      },
     );
 
   if (
@@ -35,7 +35,7 @@ export async function onRequestPost(
           "content-type": "application/json",
         },
         status: 400,
-      }
+      },
     );
 
   const verifyKey = await context.env.VERIFICATIONS.get(context.data.user.id);
@@ -53,7 +53,7 @@ export async function onRequestPost(
 
   await context.env.VERIFICATIONS.put(
     context.data.user.id,
-    JSON.stringify(verifyData)
+    JSON.stringify(verifyData),
   );
   return new Response(null, {
     status: 204,

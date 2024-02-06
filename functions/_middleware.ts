@@ -47,7 +47,7 @@ async function setUser(context: RequestContext) {
 
   if (cookieList.vrs) {
     const userData = await context.env.SESSIONS.get(
-      await generateHash(cookieList.vrs)
+      await generateHash(cookieList.vrs),
     );
 
     if (userData) context.data.user = JSON.parse(userData);

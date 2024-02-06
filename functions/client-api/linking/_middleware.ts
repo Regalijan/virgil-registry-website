@@ -8,7 +8,7 @@ function makeErrorResponse(error: string, status: number): Response {
 }
 
 export async function onRequestPost(
-  context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>
+  context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>,
 ) {
   if (!context.data.user) return makeErrorResponse("Unauthenticated", 401);
 

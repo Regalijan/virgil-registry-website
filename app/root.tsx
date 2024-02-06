@@ -81,7 +81,7 @@ export async function loader({
 
 function getMarkup(
   loaderData: { [k: string]: any },
-  child: ReactNode
+  child: ReactNode,
 ): JSX.Element {
   const Document = withEmotionCache(
     ({ children }: { children: ReactNode }, emotionCache) => {
@@ -137,7 +137,7 @@ function getMarkup(
             <StrictMode>
               <ChakraProvider
                 colorModeManager={cookieStorageManagerSSR(
-                  typeof document === "undefined" ? "" : document.cookie
+                  typeof document === "undefined" ? "" : document.cookie,
                 )}
                 theme={theme}
               >
@@ -155,7 +155,7 @@ function getMarkup(
           </body>
         </html>
       );
-    }
+    },
   );
 
   return <Document>{child}</Document>;
