@@ -71,9 +71,13 @@ export default function () {
         <Container maxW="container.xl">
           <Flex>
             <VStack>
-              <HStack display="flex" w="100%" paddingBottom="120px">
+              <HStack
+                className="lg-display-flex"
+                w="100%"
+                paddingBottom="120px"
+              >
                 <Container
-                  className="lg-display-flex lg-display-pb"
+                  className="lg-display-pb"
                   display="flex"
                   justifyContent="center"
                 >
@@ -90,11 +94,7 @@ export default function () {
                     />
                   </svg>
                 </Container>
-                <Container
-                  className="lg-display-flex-reverse lg-display-pb"
-                  maxW="container.xl"
-                  textAlign="left"
-                >
+                <Container maxW="container.xl" textAlign="left">
                   <Heading pb="20px">Better Privacy</Heading>
                   <Text fontSize="xl">
                     We allow you to make your data as public or private as you
@@ -103,11 +103,12 @@ export default function () {
                   </Text>
                 </Container>
               </HStack>
-              <HStack w="100%" paddingBottom="120px">
-                <Container
-                  className="lg-display-flex lg-display-pb"
-                  textAlign="left"
-                >
+              <HStack
+                className="lg-display-flex-reverse"
+                w="100%"
+                paddingBottom="120px"
+              >
+                <Container className="lg-display-pb" textAlign="left">
                   <Heading pb="20px">Integration</Heading>
                   <Text fontSize="xl">
                     Utilize Virgil's moderation features with Roblox
@@ -132,7 +133,7 @@ export default function () {
                   </svg>
                 </Container>
               </HStack>
-              <HStack w="100%">
+              <HStack className="lg-display-flex" display="flex" w="100%">
                 <Container
                   className="lg-display-pb"
                   display="flex"
