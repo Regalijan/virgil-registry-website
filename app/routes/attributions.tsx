@@ -106,7 +106,7 @@ export default function () {
       <br />
       <Heading>Original Logo</Heading>
       <br />
-      <Link href="discord:///users/165047934113677312">Virt#0001</Link>
+      <Link href="discord:///users/165047934113677312">_virt</Link>
     </Container>
   );
 }
