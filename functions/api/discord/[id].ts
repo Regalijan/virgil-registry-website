@@ -12,9 +12,15 @@ export async function onRequestGet(
     return makeResponse({ error: "Invalid Server ID" }, 400);
 
   const locatedUser = await context.env.REGISTRY_DB.prepare(
-    "SELECT discord_privacy, roblox_id, username FROM verifications WHERE discord_id = ? AND server_id = ?;",
+    "SELECT discord_privacy, roblox_id, username FROM verifications WHERE discord_id = ? AND server_id " +
+      serverId
+      ? "= ?;"
+      : "IS NULL;",
   )
-    .bind(context.params.id, serverId)
+    .bind(
+      context.params.id,
+      typeof serverId === "string" ? serverId : undefined,
+    )
     .first();
 
   const { data } = context;
