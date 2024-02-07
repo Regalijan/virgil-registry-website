@@ -165,23 +165,25 @@ export async function onRequestPost(
     }),
   );
 
-  await fetch(
-    `https://discord.com/api/v10/users/@me/applications/${env.DISCORD_ID}/role-connection`,
-    {
-      body: JSON.stringify({
-        metadata: {
-          verified: 1,
+  if (!data.body.server) {
+    await fetch(
+      `https://discord.com/api/v10/users/@me/applications/${env.DISCORD_ID}/role-connection`,
+      {
+        body: JSON.stringify({
+          metadata: {
+            verified: 1,
+          },
+          platform_name: "Roblox",
+          platform_username: decodedToken.preferred_username,
+        }),
+        headers: {
+          authorization: `Bearer ${data.user.access_token}`,
+          "content-type": "application/json",
         },
-        platform_name: "Roblox",
-        platform_username: decodedToken.preferred_username,
-      }),
-      headers: {
-        authorization: `Bearer ${data.user.access_token}`,
-        "content-type": "application/json",
+        method: "PUT",
       },
-      method: "PUT",
-    },
-  );
+    );
+  }
 
   return new Response(null, {
     status: 204,
