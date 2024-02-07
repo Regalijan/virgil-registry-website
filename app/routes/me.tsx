@@ -30,15 +30,19 @@ export async function loader({ context }: { context: RequestContext }) {
 
   const userData: null | {
     avatar: string;
-    id: number;
+    discord_privacy: number;
+    roblox_id: number;
+    roblox_privacy: number;
     username: string;
-    privacy: {
-      discord: number;
-      roblox: number;
-    };
   } = await context.env.VERIFICATIONS.get(context.data.user.id, {
     type: "json",
   });
+
+  await context.env.REGISTRY_DB.prepare(
+    "SELECT discord_privacy, roblox_id, roblox_privacy, username FROM verifications WHERE discord_id = ? AND server_id = null;",
+  )
+    .bind(context.data.user.id)
+    .first();
 
   if (!userData)
     throw new Response(null, {
@@ -49,7 +53,7 @@ export async function loader({ context }: { context: RequestContext }) {
     });
 
   const thumbnailFetch = await fetch(
-    `https://thumbnails.roblox.com/v1/users/avatar?format=Png&size=180x180&userIds=${userData.id}`,
+    `https://thumbnails.roblox.com/v1/users/avatar?format=Png&size=180x180&userIds=${userData.roblox_id}`,
   );
 
   if (!thumbnailFetch.ok) return userData;
@@ -165,7 +169,7 @@ export default function () {
         duration: 5000,
         isClosable: true,
       });
-      setData({ ...data, privacy: { discord, roblox } });
+      setData({ ...data, discord_privacy: discord, roblox_privacy: roblox });
     }
   }
 
@@ -192,24 +196,24 @@ export default function () {
             <br />
             <Text>Discord-to-Roblox Visibility</Text>
             <Select id="discord-privacy">
-              <option value={0} selected={data.privacy?.discord === 0}>
+              <option value={0} selected={data.discord_privacy === 0}>
                 Everyone
               </option>
-              <option value={1} selected={data.privacy?.discord === 1}>
+              <option value={1} selected={data.discord_privacy === 1}>
                 Anyone with an API key
               </option>
-              <option value={2} selected={data.privacy?.discord === 2}>
+              <option value={2} selected={data.discord_privacy === 2}>
                 Only official bots
               </option>
             </Select>
             <br />
             <Text>Roblox-to-Discord Visibility</Text>
             <Select id="rbx-privacy">
-              <option selected={data.privacy?.roblox === 0}>Everyone</option>
-              <option selected={data.privacy?.roblox === 1}>
+              <option selected={data.roblox_privacy === 0}>Everyone</option>
+              <option selected={data.roblox_privacy === 1}>
                 Anyone with an API key
               </option>
-              <option selected={data.privacy?.roblox === 2}>
+              <option selected={data.roblox_privacy === 2}>
                 Only official bots
               </option>
             </Select>
