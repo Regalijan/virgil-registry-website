@@ -83,9 +83,6 @@ export async function onRequestPost(
     );
   }
 
-  const accessTokenExp = JSON.parse(
-    access_token.split(".")[1].replaceAll("-", "+").replaceAll("_", "/"),
-  ).exp;
   const banKV = env.BANS;
   const db = env.REGISTRY_DB;
 
