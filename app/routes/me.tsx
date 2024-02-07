@@ -34,11 +34,7 @@ export async function loader({ context }: { context: RequestContext }) {
     roblox_id: number;
     roblox_privacy: number;
     username: string;
-  } = await context.env.VERIFICATIONS.get(context.data.user.id, {
-    type: "json",
-  });
-
-  await context.env.REGISTRY_DB.prepare(
+  } = await context.env.REGISTRY_DB.prepare(
     "SELECT discord_privacy, roblox_id, roblox_privacy, username FROM verifications WHERE discord_id = ? AND server_id = null;",
   )
     .bind(context.data.user.id)
