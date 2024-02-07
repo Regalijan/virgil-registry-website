@@ -1,11 +1,7 @@
 export async function onRequestPost(
-  context: EventContext<
-    { [k: string]: string } & { VERIFICATIONS: KVNamespace },
-    string,
-    { [k: string]: any }
-  >,
+  context: EventContext<Env, string, { [k: string]: any }>,
 ) {
-  const { discord, roblox } = context.data.body;
+  const { discord, roblox, user } = context.data.body;
 
   if (typeof discord !== "number" || typeof roblox !== "number")
     return new Response(
@@ -38,23 +34,12 @@ export async function onRequestPost(
       },
     );
 
-  const verifyKey = await context.env.VERIFICATIONS.get(context.data.user.id);
+  await context.env.REGISTRY_DB.prepare(
+    "UPDATE verifications SET discord_privacy = ?, roblox_privacy = ? WHERE discord_id = ? AND roblox_id = ?",
+  )
+    .bind(discord, roblox, context.data.user.id, user)
+    .run();
 
-  if (!verifyKey)
-    return new Response(JSON.stringify({ error: "You are not verified" }), {
-      headers: {
-        "content-type": "application/json",
-      },
-      status: 400,
-    });
-
-  const verifyData = JSON.parse(verifyKey);
-  verifyData.privacy = { discord, roblox };
-
-  await context.env.VERIFICATIONS.put(
-    context.data.user.id,
-    JSON.stringify(verifyData),
-  );
   return new Response(null, {
     status: 204,
   });
