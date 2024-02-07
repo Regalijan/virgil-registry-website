@@ -1,14 +1,14 @@
 export async function onRequestPost(
-  context: EventContext<
-    { [k: string]: string } & { VERIFICATIONS: KVNamespace },
-    string,
-    { [k: string]: any }
-  >,
+  context: EventContext<Env, string, { [k: string]: any }>,
 ) {
-  const verifyKV = context.env.VERIFICATIONS;
-  const verifyKey = await verifyKV.get(context.data.user.id);
+  const { user } = context.data.body;
+  const existingVerification = await context.env.REGISTRY_DB.prepare(
+    "SELECT id FROM verifications WHERE discord_id = ? AND roblox_id = ?;",
+  )
+    .bind(context.data.user.id, user)
+    .first();
 
-  if (!verifyKey)
+  if (!existingVerification)
     return new Response(JSON.stringify({ error: "You are not verified" }), {
       headers: {
         "content-type": "application/json",
@@ -16,9 +16,8 @@ export async function onRequestPost(
       status: 400,
     });
 
-  const verifyData = JSON.parse(verifyKey);
   const usernameCheckReq = await fetch(
-    `https://users.roblox.com/v1/users/${verifyData.id}`,
+    `https://users.roblox.com/v1/users/${user}`,
   );
 
   if (!usernameCheckReq.ok)
@@ -41,10 +40,12 @@ export async function onRequestPost(
 
   const response_obj: { [k: string]: string } = { username: rbxUserData.name };
 
-  if (verifyData.username !== rbxUserData.name) {
-    verifyData.username = rbxUserData.name;
-    await verifyKV.put(context.data.user.id, JSON.stringify(verifyData));
-
+  if (existingVerification.username !== rbxUserData.name) {
+    await context.env.REGISTRY_DB.prepare(
+      "UPDATE verifications SET username = ? WHERE id = ?;",
+    )
+      .bind(rbxUserData.name, existingVerification.id)
+      .run();
     await fetch(
       `https://discord.com/api/v10/users/@me/applications/${context.env.DISCORD_ID}/role-connection`,
       {
