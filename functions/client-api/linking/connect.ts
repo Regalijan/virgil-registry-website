@@ -118,41 +118,38 @@ export async function onRequestPost(
     });
   }
 
+  const serverId = data.body.server || null;
+
   if (
     await db
       .prepare(
-        "SELECT id FROM verifications WHERE discord_id = ? AND roblox_id = ?;",
+        "SELECT id FROM verifications WHERE discord_id = ? AND roblox_id = ? AND server_id = ?;",
       )
-      .bind(data.user.id, parseInt(decodedToken.sub))
+      .bind(data.user.id, parseInt(decodedToken.sub), serverId)
       .first()
-  )
-    return new Response(
-      JSON.stringify({
-        error:
-          "That Roblox account is already verified with this Discord account",
-      }),
-      {
-        headers: {
-          "content-type": "application/json",
-        },
-        status: 400,
-      },
-    );
-
-  await db
-    .prepare(
-      "INSERT INTO verifications (discord_id, discord_privacy, id, roblox_id, roblox_privacy, server_id, username) VALUES (?, ?, ?, ?, ?, ?, ?);",
-    )
-    .bind(
-      data.user.id,
-      0,
-      crypto.randomUUID(),
-      parseInt(decodedToken.sub),
-      1,
-      data.body.server || null,
-      decodedToken.preferred_username,
-    )
-    .run();
+  ) {
+    await db
+      .prepare(
+        "UPDATE verifications SET roblox_id = ? WHERE discord_id = ? AND server_id = ?;",
+      )
+      .bind(decodedToken.sub, data.user.id, serverId)
+      .run();
+  } else {
+    await db
+      .prepare(
+        "INSERT INTO verifications (discord_id, discord_privacy, id, roblox_id, roblox_privacy, server_id, username) VALUES (?, ?, ?, ?, ?, ?, ?);",
+      )
+      .bind(
+        data.user.id,
+        0,
+        crypto.randomUUID(),
+        parseInt(decodedToken.sub),
+        1,
+        data.body.server || null,
+        decodedToken.preferred_username,
+      )
+      .run();
+  }
 
   await env.CREDENTIALS.put(
     decodedToken.sub,
