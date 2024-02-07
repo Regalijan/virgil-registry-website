@@ -69,7 +69,7 @@ export default function () {
 
   async function refreshUsername() {
     const refreshReq = await fetch("/client-api/linking/refresh", {
-      body: "{}",
+      body: JSON.stringify({ user: data.roblox_id }),
       headers: {
         "content-type": "application/json",
       },

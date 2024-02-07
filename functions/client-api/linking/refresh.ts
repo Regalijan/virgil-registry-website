@@ -1,7 +1,12 @@
+import makeResponse from "functions/api/makeResponse";
+
 export async function onRequestPost(
   context: EventContext<Env, string, { [k: string]: any }>,
 ) {
   const { user } = context.data.body;
+
+  if (!user) return makeResponse({ error: "No user to refresh" }, 400);
+
   const existingVerification = await context.env.REGISTRY_DB.prepare(
     "SELECT id FROM verifications WHERE discord_id = ? AND roblox_id = ?;",
   )
