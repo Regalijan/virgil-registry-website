@@ -5,7 +5,7 @@ export async function onRequestGet(
 ) {
   const locatedUsers = (
     await context.env.REGISTRY_DB.prepare(
-      "SELECT discord_id, roblox_privacy WHERE roblox_id = ?;",
+      "SELECT discord_id, roblox_privacy FROM verifications WHERE roblox_id = ?;",
     )
       .bind(context.params.id)
       .all()
