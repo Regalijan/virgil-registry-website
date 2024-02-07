@@ -112,9 +112,7 @@ export default function (props: {
                     display={props.id ? "flex" : "none"}
                     src={getAvatarUrl(props)}
                   />
-                  <Text>
-                    {props.id ? `${props.username}#${props.discriminator}` : ""}
-                  </Text>
+                  <Text>{props.id ? props.username : ""}</Text>
                   <Button
                     style={{ display: props.id ? "block" : "none" }}
                     variant="ghost"
@@ -160,7 +158,7 @@ export default function (props: {
             />
             &nbsp;&nbsp;&nbsp;&nbsp;
             <Text align="center" style={{ overflowWrap: "anywhere" }}>
-              {props.id ? `${props.username}#${props.discriminator}` : ""}
+              {props.id ? props.username : ""}
             </Text>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <svg
