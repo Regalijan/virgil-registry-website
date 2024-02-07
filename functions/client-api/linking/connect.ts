@@ -163,7 +163,6 @@ export async function onRequestPost(
       access_token,
       refresh_token,
     }),
-    { expiration: accessTokenExp - 60 },
   );
 
   await fetch("https://apis.roblox.com/oauth/v1/token/revoke", {
