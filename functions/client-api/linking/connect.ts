@@ -1,5 +1,5 @@
 export async function onRequestPost(
-  context: EventContext<{ [k: string]: string }, string, { [k: string]: any }>,
+  context: EventContext<Env, string, { [k: string]: any }>,
 ) {
   const { data, env } = context;
 
@@ -13,6 +13,13 @@ export async function onRequestPost(
         status: 400,
       },
     );
+
+  if (
+    data.body.server?.match(/\D/) ||
+    data.body.server?.length > 19 ||
+    data.body.server?.length < 17
+  )
+    return new Response(JSON.stringify({ error: "Invalid server ID" }));
 
   const { hostname, protocol } = new URL(context.request.url);
 
@@ -39,9 +46,10 @@ export async function onRequestPost(
     });
 
   const {
+    access_token,
     id_token,
     refresh_token,
-  }: { id_token?: string; refresh_token: string } = await jwtFetch.json();
+  }: { access_token: string; id_token?: string; refresh_token: string } = await jwtFetch.json();
 
   if (!id_token)
     return new Response(
@@ -74,8 +82,9 @@ export async function onRequestPost(
     );
   }
 
-  const banKV = env.BANS as unknown as KVNamespace;
-  const verifyKV = env.VERIFICATIONS as unknown as KVNamespace;
+  const accessTokenExp = JSON.parse(access_token.split(".")[1].replaceAll("-", "+").replaceAll("_", "/")).exp;
+  const banKV = env.BANS;
+  const db = env.REGISTRY_DB;
 
   const discordBan = await banKV.get(data.user.id);
   const robloxBan = await banKV.get(decodedToken.sub);
@@ -109,24 +118,25 @@ export async function onRequestPost(
     });
   }
 
-  await verifyKV.put(
-    data.user.id,
-    JSON.stringify({
-      id: parseInt(decodedToken.sub),
-      username: decodedToken.preferred_username,
-      privacy: {
-        discord: 0,
-        roblox: 1,
-      },
-    }),
-  );
+  await db
+    .prepare(
+      "INSERT INTO verifications (discord_id, discord_privacy, id, roblox_id, roblox_privacy, server_id, username) VALUES (?, ?, ?, ?, ?, ?, ?);",
+    )
+    .bind(
+      data.user.id,
+      0,
+      crypto.randomUUID(),
+      parseInt(decodedToken.sub),
+      1,
+      data.body.server || null,
+      decodedToken.preferred_username,
+    )
+    .run();
 
-  const reverseData: string[] = JSON.parse(
-    (await verifyKV.get(decodedToken.sub)) ?? "[]",
-  );
-
-  reverseData.push(data.user.id);
-  await verifyKV.put(decodedToken.sub, JSON.stringify(reverseData));
+  await env.CREDENTIALS.put(decodedToken.sub, JSON.stringify({
+    access_token,
+    refresh_token
+  }), { expiration: accessTokenExp - 60 });
 
   await fetch("https://apis.roblox.com/oauth/v1/token/revoke", {
     body: `token=${refresh_token}`,
