@@ -1,4 +1,16 @@
-import { Button, Container, Heading, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Container,
+  Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import Banned from "../../components/Banned";
 import createChallenge from "../../challenge";
 import { useLoaderData } from "@remix-run/react";
@@ -20,7 +32,7 @@ async function initiateRBXSignIn(clientId: string) {
   window.location.assign(
     `https://apis.roblox.com/oauth/v1/authorize?client_id=${clientId}&code_challenge=${challenge}&code_challenge_method=S256&redirect_uri=${encodeURIComponent(
       `${protocol}//${hostname}/link`,
-    )}&response_type=code&scope=openid%20profile&state=${state}`,
+    )}&response_type=code&scope=openid%20profile%20user.inventory-item%3Aread&state=${state}`,
   );
 }
 
@@ -42,7 +54,13 @@ export async function loader({
       status: 303,
     });
 
-  if (await context.env.VERIFICATIONS.get(context.data.user.id))
+  if (
+    await context.env.REGISTRY_DB.prepare(
+      "SELECT id FROM verifications WHERE discord_id = ?;",
+    )
+      .bind(context.data.user.id)
+      .first()
+  )
     throw new Response(null, {
       headers: {
         location: "/me",
@@ -66,11 +84,20 @@ export async function loader({
 
 export default function () {
   const loaderData = useLoaderData<typeof loader>();
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   return loaderData.banned ? (
     <Banned email={loaderData.email} reason={loaderData.reason} />
   ) : (
     <Container pt="40px" maxW="28em">
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Secondary Account Verification</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody></ModalBody>
+        </ModalContent>
+      </Modal>
       <Heading>Hello</Heading>
       <br />
       <Text fontSize="xl">This will be quick, we promise.</Text>
