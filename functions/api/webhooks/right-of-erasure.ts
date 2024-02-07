@@ -62,14 +62,11 @@ export async function onRequestPost(
 
   const { UserId: user }: { UserId: number } = data.EventPayload;
 
-  const reverseData = await context.env.VERIFICATIONS.get(user.toString());
-
-  if (!reverseData) return new Response(null, { status: 204 });
-
-  for (const user of JSON.parse(reverseData))
-    await context.env.VERIFICATIONS.delete(user);
-
-  await context.env.VERIFICATIONS.delete(user.toString());
+  await context.env.REGISTRY_DB.prepare(
+    "DELETE FROM verifications WHERE roblox_id = ?;",
+  )
+    .bind(user)
+    .run();
 
   return new Response(null, { status: 204 });
 }
