@@ -165,15 +165,6 @@ export async function onRequestPost(
     }),
   );
 
-  await fetch("https://apis.roblox.com/oauth/v1/token/revoke", {
-    body: `token=${refresh_token}`,
-    headers: {
-      authorization: `Basic ${btoa(env.RBX_ID + ":" + env.RBX_SECRET)}`,
-      "content-type": "application/x-www-form-urlencoded",
-    },
-    method: "POST",
-  });
-
   await fetch(
     `https://discord.com/api/v10/users/@me/applications/${env.DISCORD_ID}/role-connection`,
     {
