@@ -49,7 +49,8 @@ export async function onRequestPost(
     access_token,
     id_token,
     refresh_token,
-  }: { access_token: string; id_token?: string; refresh_token: string } = await jwtFetch.json();
+  }: { access_token: string; id_token?: string; refresh_token: string } =
+    await jwtFetch.json();
 
   if (!id_token)
     return new Response(
@@ -82,7 +83,9 @@ export async function onRequestPost(
     );
   }
 
-  const accessTokenExp = JSON.parse(access_token.split(".")[1].replaceAll("-", "+").replaceAll("_", "/")).exp;
+  const accessTokenExp = JSON.parse(
+    access_token.split(".")[1].replaceAll("-", "+").replaceAll("_", "/"),
+  ).exp;
   const banKV = env.BANS;
   const db = env.REGISTRY_DB;
 
@@ -133,10 +136,14 @@ export async function onRequestPost(
     )
     .run();
 
-  await env.CREDENTIALS.put(decodedToken.sub, JSON.stringify({
-    access_token,
-    refresh_token
-  }), { expiration: accessTokenExp - 60 });
+  await env.CREDENTIALS.put(
+    decodedToken.sub,
+    JSON.stringify({
+      access_token,
+      refresh_token,
+    }),
+    { expiration: accessTokenExp - 60 },
+  );
 
   await fetch("https://apis.roblox.com/oauth/v1/token/revoke", {
     body: `token=${refresh_token}`,
