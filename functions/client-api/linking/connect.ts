@@ -121,6 +121,27 @@ export async function onRequestPost(
     });
   }
 
+  if (
+    await db
+      .prepare(
+        "SELECT id FROM verifications WHERE discord_id = ? AND roblox_id = ?;",
+      )
+      .bind(data.user.id, parseInt(decodedToken.sub))
+      .first()
+  )
+    return new Response(
+      JSON.stringify({
+        error:
+          "That Roblox account is already verified with this Discord account",
+      }),
+      {
+        headers: {
+          "content-type": "application/json",
+        },
+        status: 400,
+      },
+    );
+
   await db
     .prepare(
       "INSERT INTO verifications (discord_id, discord_privacy, id, roblox_id, roblox_privacy, server_id, username) VALUES (?, ?, ?, ?, ?, ?, ?);",
