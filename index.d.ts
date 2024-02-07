@@ -7,6 +7,8 @@ declare global {
     API_KEYS: KVNamespace;
     ASSETS: Fetcher;
     BANS: KVNamespace;
+    CREDENTIALS: KVNamespace;
+    REGISTRY_DB: D1Database;
     SESSIONS: KVNamespace;
     VERIFICATIONS: KVNamespace;
     [k: string]: string;
