@@ -35,7 +35,11 @@ export default function () {
       <Heading size="md">Get user by Discord ID</Heading>
       <br />
       <Text>
-        GET <Code>/api/discord/:discord_id</Code>
+        GET <Code>GET /api/discord/:discord_id</Code>
+        <br />
+        This endpoint supports the `server_id` query parameter to retrieve the
+        user's verification information for the specified server (pass the 17-19
+        server id)
       </Text>
       <br />
       <Text>
@@ -48,7 +52,7 @@ export default function () {
       <Heading size="md">Get Discord IDs by Roblox ID</Heading>
       <br />
       <Text>
-        GET <Code>/api/roblox/:roblox_id</Code>
+        <Code>GET /api/roblox/:roblox_id</Code>
       </Text>
       <br />
       <Text>
