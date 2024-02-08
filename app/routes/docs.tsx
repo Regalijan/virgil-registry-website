@@ -37,9 +37,9 @@ export default function () {
       <Text>
         GET <Code>GET /api/discord/:discord_id</Code>
         <br />
-        This endpoint supports the `server_id` query parameter to retrieve the
-        user's verification information for the specified server (pass the 17-19
-        server id)
+        This endpoint supports the <Code>server_id</Code> query parameter to
+        retrieve the user's verification information for the specified server
+        (pass the 17-19 server id)
       </Text>
       <br />
       <Text>
