@@ -3,7 +3,7 @@ import makeResponse from "../makeResponse";
 export async function onRequestGet(
   context: EventContext<Env, string, { [k: string]: any }>,
 ) {
-  const serverId = new URLSearchParams(context.request.url).get("server_id");
+  const serverId = new URL(context.request.url).searchParams.get("server_id");
 
   if (
     serverId &&
@@ -12,15 +12,9 @@ export async function onRequestGet(
     return makeResponse({ error: "Invalid Server ID" }, 400);
 
   const locatedUser = await context.env.REGISTRY_DB.prepare(
-    "SELECT discord_privacy, roblox_id, username FROM verifications WHERE discord_id = ? AND server_id " +
-      serverId
-      ? "= ?;"
-      : "IS NULL;",
+    `SELECT discord_privacy, roblox_id, username FROM verifications WHERE discord_id = ? AND server_id ${serverId ? "= ?" : "IS NULL"};`,
   )
-    .bind(
-      context.params.id,
-      typeof serverId === "string" ? serverId : undefined,
-    )
+    .bind(serverId ? (context.params.id, serverId) : context.params.id)
     .first();
 
   const { data } = context;
