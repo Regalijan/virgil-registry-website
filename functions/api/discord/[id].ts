@@ -24,6 +24,8 @@ export async function onRequestGet(
   const userPrivacy = locatedUser.discord_privacy;
   delete locatedUser.discord_privacy;
 
+  delete Object.assign(locatedUser, { id: locatedUser.roblox_id }).roblox_id;
+
   if (!userPrivacy || data.is_internal) return makeResponse(locatedUser, 200);
 
   if (!data.apiKeyInfo)
