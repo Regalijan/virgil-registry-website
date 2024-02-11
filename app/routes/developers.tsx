@@ -24,7 +24,7 @@ import { useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 
 export async function loader({ context }: { context: RequestContext }) {
-  if (context.data.user?.id)
+  if (!context.data.user?.id)
     throw new Response(null, {
       headers: {
         location: "/login",
@@ -32,16 +32,13 @@ export async function loader({ context }: { context: RequestContext }) {
       status: 303,
     });
 
-  return {
-    can_create_keys: Boolean(context.data.user.email),
-    keys: (
-      await context.env.REGISTRY_DB.prepare(
-        "SELECT created_at, email, key_name FROM api_keys WHERE user = ?;",
-      )
-        .bind(context.data.user.id)
-        .all()
-    ).results,
-  };
+  return (
+    await context.env.REGISTRY_DB.prepare(
+      "SELECT created_at, email, key_name FROM api_keys WHERE user = ?;",
+    )
+      .bind(context.data.user.id)
+      .all()
+  ).results;
 }
 
 export default function () {
@@ -67,14 +64,6 @@ export default function () {
               }}
               value={selectedKey.key_name}
             />
-            <br />
-            <Heading size="sm">Contact Email</Heading>
-            <Input
-              maxLength={254}
-              onChange={(e) => {
-                selectKey({ ...selectedKey, email: e.target.value });
-              }}
-            />
           </ModalBody>
           <ModalFooter>
             <Button textColor="red" variant="ghost" mr="8px">
@@ -98,7 +87,7 @@ export default function () {
             </Tr>
           </Thead>
           <Tbody>
-            {data.keys.map((key: { [k: string]: any }) => {
+            {data.map((key: { [k: string]: any }) => {
               return (
                 <Tr>
                   <Td>{key.key_name}</Td>
