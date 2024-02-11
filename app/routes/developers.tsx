@@ -32,9 +32,23 @@ export async function loader({ context }: { context: RequestContext }) {
       status: 303,
     });
 
+  if (
+    await context.env.REGISTRY_DB.prepare(
+      "SELECT id FROM verifications WHERE discord_id = ? AND server_id IS NULL;",
+    )
+      .bind(context.data.user.id)
+      .first()
+  )
+    throw new Response(null, {
+      headers: {
+        location: "/verify",
+      },
+      status: 303,
+    });
+
   return (
     await context.env.REGISTRY_DB.prepare(
-      "SELECT created_at, email, key_name FROM api_keys WHERE user = ?;",
+      "SELECT created_at, key_name FROM api_keys WHERE user = ?;",
     )
       .bind(context.data.user.id)
       .all()
