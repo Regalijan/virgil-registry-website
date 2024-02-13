@@ -29,10 +29,11 @@ export async function onRequest(
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
-  context.data.apiKeyInfo = (await context.env.API_KEYS.get(
-    apiKeyHash,
-    "json",
-  )) as APIKey;
+  context.data.apiKeyInfo = await context.env.REGISTRY_DB.prepare(
+    "SELECT access_level FROM api_keys WHERE key_hash = ?;",
+  )
+    .bind(apiKeyHash)
+    .first();
 
   if (!context.data.apiKeyInfo)
     return new Response('{"error":"Invalid token"}', {
