@@ -125,16 +125,10 @@ export async function onRequestPost(
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
     .replace(/=/g, "");
-  const tokenHash = await crypto.subtle.digest(
-    "SHA-512",
-    new TextEncoder().encode(sessionToken),
-  );
 
   try {
     await SESSIONS.put(
-      Array.from(new Uint8Array(tokenHash))
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join(""),
+      await generateHash(sessionToken),
       JSON.stringify({
         ...((await currentUserRequest.json()) as { [k: string]: any }),
         access_token,
