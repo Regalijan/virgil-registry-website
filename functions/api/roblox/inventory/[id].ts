@@ -27,7 +27,9 @@ export async function onRequestPost(context: RequestContext) {
 
   const result = (await context.env.REGISTRY_DB.prepare(
     "SELECT roblox_privacy FROM verifications WHERE roblox_id = ? ORDER BY roblox_privacy DESC LIMIT 1;",
-  ).first()) as { roblox_privacy: number } | null;
+  )
+    .bind(robloxId)
+    .first()) as { roblox_privacy: number } | null;
 
   if (!result) return makeResponse({ error: "This user is not verified" }, 404);
 
