@@ -141,7 +141,10 @@ export async function onRequestPost(context: RequestContext) {
         },
       );
 
-      if (!inventoryRes.ok) break;
+      if (!inventoryRes.ok) {
+        console.log(await inventoryRes.text());
+        break;
+      }
 
       const inventoryData = (await inventoryRes.json()) as {
         inventoryItems: { assetDetails: { assetId: string } }[];
@@ -170,8 +173,12 @@ export async function onRequestPost(context: RequestContext) {
 
   return makeResponse(
     new Array()
-      .concat(...(await Promise.allSettled(itemPromises)))
-      .filter((promise) => promise.status === "fulfilled"),
+      .concat(
+        ...((await Promise.allSettled(itemPromises)).filter(
+          (p) => p.status === "fulfilled",
+        ) as PromiseFulfilledResult<any>[]),
+      )
+      .map((item) => item.value),
     200,
   );
 }
