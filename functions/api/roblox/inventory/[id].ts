@@ -69,6 +69,7 @@ export async function onRequestPost(context: RequestContext) {
         authorization:
           "Basic " + btoa(`${context.env.RBX_ID}:${context.env.RBX_SECRET}`),
       },
+      method: "POST",
     });
 
     if (!refreshResp.ok) {
