@@ -26,7 +26,7 @@ export async function onRequestPost(context: RequestContext) {
     return makeResponse({ error: "Item lists must be integers" }, 400);
 
   const result = (await context.env.REGISTRY_DB.prepare(
-    "SELECT roblox_privacy WHERE roblox_id = ? ORDER BY roblox_privacy DESC LIMIT 1;",
+    "SELECT roblox_privacy FROM verifications WHERE roblox_id = ? ORDER BY roblox_privacy DESC LIMIT 1;",
   ).first()) as { roblox_privacy: number } | null;
 
   if (!result) return makeResponse({ error: "This user is not verified" }, 404);
