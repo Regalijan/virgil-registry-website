@@ -123,7 +123,7 @@ export async function onRequestPost(
   if (
     await db
       .prepare(
-        "SELECT id FROM verifications WHERE discord_id = ? AND roblox_id = ? AND server_id = ?;",
+        `SELECT id FROM verifications WHERE discord_id = ? AND roblox_id = ? AND (server_id = ? OR server_id IS NULL);`,
       )
       .bind(data.user.id, parseInt(decodedToken.sub), serverId)
       .first()
