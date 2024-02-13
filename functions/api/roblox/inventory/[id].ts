@@ -59,7 +59,7 @@ export async function onRequestPost(context: RequestContext) {
     ),
   );
 
-  if (exp >= Math.floor(Date.now() / 1000)) {
+  if (exp <= Math.floor(Date.now() / 1000) - 60) {
     const refreshResp = await fetch("https://apis.roblox.com/oauth/v1/token", {
       body: new URLSearchParams({
         grant_type: "refresh_token",
@@ -142,7 +142,7 @@ export async function onRequestPost(context: RequestContext) {
       );
 
       if (!inventoryRes.ok) {
-        console.log(await inventoryRes.text());
+        console.log(`${inventoryRes.status}: ${await inventoryRes.text()}`);
         break;
       }
 
