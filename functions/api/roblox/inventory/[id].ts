@@ -171,14 +171,17 @@ export async function onRequestPost(context: RequestContext) {
   for (const itemArray of arrayGroups)
     itemPromises.push(checkInventory(itemArray));
 
+  const fulfilledPromises = (await Promise.allSettled(itemPromises)).filter(
+    (p) => p.status === "fulfilled",
+  ) as PromiseFulfilledResult<
+    {
+      id: number;
+      type: string;
+    }[]
+  >[];
+
   return makeResponse(
-    new Array()
-      .concat(
-        ...((await Promise.allSettled(itemPromises)).filter(
-          (p) => p.status === "fulfilled",
-        ) as PromiseFulfilledResult<any>[]),
-      )
-      .map((item) => item.value),
+    new Array().concat(...fulfilledPromises.map((p) => p.value)),
     200,
   );
 }
