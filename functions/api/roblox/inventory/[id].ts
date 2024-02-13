@@ -113,7 +113,7 @@ export async function onRequestPost(context: RequestContext) {
   const arrayGroups = new Array(250)
     .fill("")
     .map((_, i) => fullItemList.slice(i * 250, (i + 1) * 250))
-    .filter(arr => arr.length);
+    .filter((arr) => arr.length);
 
   console.log(JSON.stringify(arrayGroups));
 
@@ -161,14 +161,19 @@ export async function onRequestPost(context: RequestContext) {
       }
 
       const inventoryData = (await inventoryRes.json()) as {
-        inventoryItems: { assetDetails: { assetId: string } }[];
+        inventoryItems: { [k: string]: any }[];
         nextPageToken: string;
       };
 
       ownedItems.push(
         ...items.filter((item) =>
-          inventoryData.inventoryItems.find(
-            (i) => i.assetDetails.assetId === item.id.toString(),
+          inventoryData.inventoryItems.find((i) =>
+            [
+              i.assetDetails?.assetId,
+              i.badgeDetails?.badgeId,
+              i.gamePassDetails?.gamePassId,
+              i.privateServerDetails?.privateServerId,
+            ].includes(item.id.toString()),
           ),
         ),
       );
