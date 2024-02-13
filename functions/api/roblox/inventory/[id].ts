@@ -63,11 +63,12 @@ export async function onRequestPost(context: RequestContext) {
     const refreshResp = await fetch("https://apis.roblox.com/oauth/v1/token", {
       body: new URLSearchParams({
         grant_type: "refresh_token",
-        token: oauthCredentials.refresh_token,
+        refresh_token: oauthCredentials.refresh_token,
       }),
       headers: {
         authorization:
           "Basic " + btoa(`${context.env.RBX_ID}:${context.env.RBX_SECRET}`),
+        "content-type": "application/x-www-form-urlencoded",
       },
       method: "POST",
     });
