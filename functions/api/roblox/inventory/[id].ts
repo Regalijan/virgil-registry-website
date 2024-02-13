@@ -110,10 +110,12 @@ export async function onRequestPost(context: RequestContext) {
   if (fullItemList.length > 1000)
     return makeResponse({ error: "Too many items to check" }, 400);
 
-  const groupCount = Math.ceil(fullItemList.length / 250);
-  const arrayGroups = new Array(groupCount)
+  const arrayGroups = new Array(250)
     .fill("")
-    .map((_, i) => fullItemList.slice(i * groupCount, (i + 1) * groupCount));
+    .map((_, i) => fullItemList.slice(i * 250, (i + 1) * 250))
+    .filter(arr => arr.length);
+
+  console.log(JSON.stringify(arrayGroups));
 
   function itemArrayToFilter(
     items: { id: number; type: string }[],
@@ -128,14 +130,24 @@ export async function onRequestPost(context: RequestContext) {
   async function checkInventory(items: { id: number; type: string }[]) {
     let finished = false;
     let pageToken = "";
-    const filter = encodeURIComponent(
-      `assetIds=${itemArrayToFilter(items, "asset")};badgeIds=${itemArrayToFilter(items, "badge")};gamePassIds=${itemArrayToFilter(items, "gamePass")};privateServerIds=${itemArrayToFilter(items, "privateServer")}`,
-    );
+    const filters = {
+      assetIds: itemArrayToFilter(items, "asset"),
+      badgeIds: itemArrayToFilter(items, "badge"),
+      gamePassIds: itemArrayToFilter(items, "gamePass"),
+      privateServerIds: itemArrayToFilter(items, "privateServer"),
+    };
+
+    let filter = [];
+
+    for (const [k, v] of Object.entries(filters)) {
+      if (v) filter.push(`${k}=${v}`);
+    }
+
     const ownedItems: { id: number; type: string }[] = [];
 
     while (!finished) {
       const inventoryRes = await fetch(
-        `https://apis.roblox.com/cloud/v2/users/${robloxId}/inventory-items?filter=${filter}&maxPageSize=500&pageToken=${pageToken}`,
+        `https://apis.roblox.com/cloud/v2/users/${robloxId}/inventory-items?filter=${encodeURIComponent(filter.join(";"))}&maxPageSize=500&pageToken=${pageToken}`,
         {
           headers: {
             authorization: `Bearer ${oauthCredentials?.access_token}`,
@@ -162,7 +174,7 @@ export async function onRequestPost(context: RequestContext) {
       );
 
       pageToken = inventoryData.nextPageToken;
-      finished = Boolean(pageToken);
+      finished = !Boolean(pageToken);
     }
 
     return ownedItems;
