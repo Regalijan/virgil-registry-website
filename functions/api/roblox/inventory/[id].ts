@@ -122,7 +122,7 @@ export async function onRequestPost(context: RequestContext) {
     return items
       .filter((item) => item.type === type)
       .map((item) => item.id)
-      .join("%2C");
+      .join(",");
   }
 
   async function checkInventory(items: { id: number; type: string }[]) {
