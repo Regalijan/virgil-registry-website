@@ -222,6 +222,9 @@ export default function () {
             >
               Save
             </Button>
+            <Link href="/client-api/export" pt="16px">
+              Download your Data
+            </Link>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
