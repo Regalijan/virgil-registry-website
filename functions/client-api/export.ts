@@ -1,4 +1,4 @@
-export async function onRequestPost(context: RequestContext) {
+export async function onRequestGet(context: RequestContext) {
   if (!context.data.user)
     return new Response('{"error":"Not logged in"}', {
       headers: {
