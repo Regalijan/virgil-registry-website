@@ -215,6 +215,7 @@ export default function () {
             </Select>
             <br />
             <Button
+              mb="16px"
               onClick={async () => {
                 await updatePrivacy();
                 onClose();
@@ -222,7 +223,13 @@ export default function () {
             >
               Save
             </Button>
-            <Link href="/client-api/export" pt="16px">
+            <br />
+            <Link
+              href="/client-api/export"
+              pt="16px"
+              textColor="red"
+              textDecorationColor="red"
+            >
               Download your Data
             </Link>
           </DrawerBody>
