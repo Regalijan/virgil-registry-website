@@ -139,7 +139,11 @@ export default function () {
     const discord = discordElem.selectedIndex;
     const roblox = rbxElem.selectedIndex;
     const privacyUpdateReq = await fetch("/client-api/linking/privacy", {
-      body: JSON.stringify({ discord, roblox }),
+      body: JSON.stringify({
+        discord,
+        roblox,
+        user: data.roblox_id,
+      }),
       headers: {
         "content-type": "application/json",
       },
