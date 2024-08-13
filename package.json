@@ -8,26 +8,26 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
-    "@fontsource/plus-jakarta-sans": "^5.0.19",
-    "@remix-run/cloudflare": "^2.8.1",
-    "@remix-run/cloudflare-pages": "^2.8.1",
-    "@remix-run/react": "^2.8.1",
-    "framer-motion": "^11.0.15",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@fontsource/plus-jakarta-sans": "^5.0.20",
+    "@remix-run/cloudflare": "^2.11.1",
+    "@remix-run/cloudflare-pages": "^2.11.1",
+    "@remix-run/react": "^2.11.1",
+    "framer-motion": "^11.3.24",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.8.1",
-    "@types/node": "^20.11.30",
-    "@types/react": "^18.2.67",
-    "@types/react-dom": "^18.2.22",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.2"
+    "@remix-run/dev": "^2.11.1",
+    "@types/node": "^20.14.15",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
   },
   "overrides": {
-    "@cloudflare/workers-types": "^4.20240314.0"
+    "@cloudflare/workers-types": "^4.20240806.0"
   },
   "prettier": {
     "endOfLine": "auto"
