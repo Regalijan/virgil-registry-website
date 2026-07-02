@@ -8,7 +8,7 @@ import {
 } from "@remix-run/react";
 import theme from "../theme";
 import { type ReactNode, StrictMode, useContext, useEffect } from "react";
-import fontStyle from "@fontsource/plus-jakarta-sans/index.css";
+import fontStyle from "@fontsource-variable/plus-jakarta-sans/index.css";
 import globalStyles from "../index.css";
 import appStyles from "../App.css";
 import { ClientStyleContext, ServerStyleContext } from "./context";
