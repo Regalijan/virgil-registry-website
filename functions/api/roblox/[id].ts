@@ -20,7 +20,7 @@ export async function onRequestGet(
 
   if (data.is_internal)
     return makeResponse(
-      locatedUsers.map((u) => u.roblox_id),
+      locatedUsers.map((u) => u.discord_id),
       200,
     );
 
